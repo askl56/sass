@@ -71,8 +71,8 @@ module Sass
       OPERATORS_REVERSE = Sass::Util.map_hash(OPERATORS) {|k, v| [v, k]}
 
       TOKEN_NAMES = Sass::Util.map_hash(OPERATORS_REVERSE) {|k, v| [k, v.inspect]}.merge(
-          :const => "variable (e.g. $foo)",
-          :ident => "identifier (e.g. middle)")
+          const: "variable (e.g. $foo)",
+          ident: "identifier (e.g. middle)")
 
       # A list of operator strings ordered with longer names first
       # so that `>` and `<` don't clobber `>=` and `<=`.
@@ -86,20 +86,20 @@ module Sass
 
       # A hash of regular expressions that are used for tokenizing.
       REGULAR_EXPRESSIONS = {
-        :whitespace => /\s+/,
-        :comment => COMMENT,
-        :single_line_comment => SINGLE_LINE_COMMENT,
-        :variable => /(\$)(#{IDENT})/,
-        :ident => /(#{IDENT})(\()?/,
-        :number => PARSEABLE_NUMBER,
-        :unary_minus_number => /-#{PARSEABLE_NUMBER}/,
-        :color => HEXCOLOR,
-        :id => /##{IDENT}/,
-        :selector => /&/,
-        :ident_op => /(#{Regexp.union(*IDENT_OP_NAMES.map do |s|
+        whitespace: /\s+/,
+        comment: COMMENT,
+        single_line_comment: SINGLE_LINE_COMMENT,
+        variable: /(\$)(#{IDENT})/,
+        ident: /(#{IDENT})(\()?/,
+        number: PARSEABLE_NUMBER,
+        unary_minus_number: /-#{PARSEABLE_NUMBER}/,
+        color: HEXCOLOR,
+        id: /##{IDENT}/,
+        selector: /&/,
+        ident_op: /(#{Regexp.union(*IDENT_OP_NAMES.map do |s|
           Regexp.new(Regexp.escape(s) + "(?!#{NMCHAR}|\Z)")
         end)})/,
-        :op => /(#{Regexp.union(*OP_NAMES)})/,
+        op: /(#{Regexp.union(*OP_NAMES)})/,
       }
 
       class << self
@@ -117,25 +117,25 @@ module Sass
       # while the boolean represents whether or not the string
       # is following an interpolated segment.
       STRING_REGULAR_EXPRESSIONS = {
-        :double => {
+        double: {
           false => string_re('"', '"'),
           true => string_re('', '"')
         },
-        :single => {
+        single: {
           false => string_re("'", "'"),
           true => string_re('', "'")
         },
-        :uri => {
+        uri: {
           false => /url\(#{W}(#{URLCHAR}*?)(#{W}\)|#\{)/,
           true => /(#{URLCHAR}*?)(#{W}\)|#\{)/
         },
         # Defined in https://developer.mozilla.org/en/CSS/@-moz-document as a
         # non-standard version of http://www.w3.org/TR/css3-conditional/
-        :url_prefix => {
+        url_prefix: {
           false => /url-prefix\(#{W}(#{URLCHAR}*?)(#{W}\)|#\{)/,
           true => /(#{URLCHAR}*?)(#{W}\)|#\{)/
         },
-        :domain => {
+        domain: {
           false => /domain\(#{W}(#{URLCHAR}*?)(#{W}\)|#\{)/,
           true => /(#{URLCHAR}*?)(#{W}\)|#\{)/
         }

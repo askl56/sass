@@ -189,23 +189,23 @@ CSS
   end
 
   def test_two_template_directories
-    set_plugin_opts :template_location => {
+    set_plugin_opts template_location: {
       template_loc => tempfile_loc,
       template_loc(nil,'more_') => tempfile_loc(nil,'more_')
     }
     check_for_updates!
-    ['more1', 'more_import'].each { |name| assert_renders_correctly(name, :prefix => 'more_') }
+    ['more1', 'more_import'].each { |name| assert_renders_correctly(name, prefix: 'more_') }
   end
 
   def test_two_template_directories_with_line_annotations
-    set_plugin_opts :line_comments => true,
-                    :style => :nested,
-                    :template_location => {
+    set_plugin_opts line_comments: true,
+                    style: :nested,
+                    template_location: {
                       template_loc => tempfile_loc,
                       template_loc(nil,'more_') => tempfile_loc(nil,'more_')
                     }
     check_for_updates!
-    assert_renders_correctly('more1_with_line_comments', 'more1', :prefix => 'more_')
+    assert_renders_correctly('more1_with_line_comments', 'more1', prefix: 'more_')
   end
 
   def test_doesnt_render_partials
@@ -340,7 +340,7 @@ WARNING
 
   def test_cached_dependencies_update
     FileUtils.mv(template_loc("basic"), template_loc("basic", "more_"))
-    set_plugin_opts :load_paths => [template_loc(nil, "more_")]
+    set_plugin_opts load_paths: [template_loc(nil, "more_")]
 
     touch 'basic', 'more_'
     assert_needs_update "import"
@@ -360,7 +360,7 @@ WARNING
   end
 
   def test_cached_if
-    set_plugin_opts :cache_store => Sass::CacheStores::Filesystem.new(tempfile_loc + '/cache')
+    set_plugin_opts cache_store: Sass::CacheStores::Filesystem.new(tempfile_loc + '/cache')
     check_for_updates!
     assert_renders_correctly 'if'
     check_for_updates!
@@ -370,20 +370,20 @@ WARNING
   end
 
   def test_cached_import_option
-    set_plugin_opts :custom => {:whatever => "correct"}
+    set_plugin_opts custom: {whatever: "correct"}
     check_for_updates!
     assert_renders_correctly "cached_import_option"
 
     @@cache_store.reset!
-    set_plugin_opts :custom => nil, :always_update => false
+    set_plugin_opts custom: nil, always_update: false
     check_for_updates!
     assert_renders_correctly "cached_import_option"
 
-    set_plugin_opts :custom => {:whatever => "correct"}, :always_update => true
+    set_plugin_opts custom: {whatever: "correct"}, always_update: true
     check_for_updates!
     assert_renders_correctly "cached_import_option"
   ensure
-    set_plugin_opts :custom => nil
+    set_plugin_opts custom: nil
   end
 
  private
@@ -533,14 +533,14 @@ WARNING
 
   def set_plugin_opts(overrides = {})
     Sass::Plugin.options.merge!(
-      :template_location => template_loc,
-      :css_location => tempfile_loc,
-      :style => :compact,
-      :always_update => true,
-      :never_update => false,
-      :full_exception => true,
-      :cache_store => @@cache_store,
-      :sourcemap => :none
+      template_location: template_loc,
+      css_location: tempfile_loc,
+      style: :compact,
+      always_update: true,
+      never_update: false,
+      full_exception: true,
+      cache_store: @@cache_store,
+      sourcemap: :none
     )
     Sass::Plugin.options.merge!(overrides)
   end

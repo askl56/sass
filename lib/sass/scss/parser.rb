@@ -155,7 +155,7 @@ module Sass
           value = [text.sub(%r{\A\s*//}, '/*').gsub(%r{^\s*//}, ' *') + ' */']
         else
           value = Sass::Engine.parse_interp(
-            text, line, @scanner.pos - text.size, :filename => @filename)
+            text, line, @scanner.pos - text.size, filename: @filename)
           newline_before_comment = @scanner.string.rindex("\n", @scanner.pos - text.length)
           last_line_before_comment =
             if newline_before_comment
@@ -608,7 +608,7 @@ module Sass
           elsif flag_name == 'global'
             global ||= true
           else
-            raise Sass::SyntaxError.new("Invalid flag \"!#{flag_name}\".", :line => @line)
+            raise Sass::SyntaxError.new("Invalid flag \"!#{flag_name}\".", line: @line)
           end
           ss
         end
@@ -1019,7 +1019,7 @@ module Sass
 
       def sass_script(*args)
         parser = self.class.sass_script_parser.new(@scanner, @line, @offset,
-                                                   :filename => @filename, :importer => @importer)
+                                                   filename: @filename, importer: @importer)
         result = parser.send(*args)
         unless @strs.empty?
           # Convert to CSS manually so that comments are ignored.
@@ -1039,24 +1039,24 @@ module Sass
       end
 
       EXPR_NAMES = {
-        :media_query => "media query (e.g. print, screen, print and screen)",
-        :media_query_list => "media query (e.g. print, screen, print and screen)",
-        :media_expr => "media expression (e.g. (min-device-width: 800px))",
-        :at_root_query => "@at-root query (e.g. (without: media))",
-        :at_root_directive_list => '* or identifier',
-        :pseudo_args => "expression (e.g. fr, 2n+1)",
-        :interp_ident => "identifier",
-        :qualified_name => "identifier",
-        :expr => "expression (e.g. 1px, bold)",
-        :selector_comma_sequence => "selector",
-        :string => "string",
-        :import_arg => "file to import (string or url())",
-        :moz_document_function => "matching function (e.g. url-prefix(), domain())",
-        :supports_condition => "@supports condition (e.g. (display: flexbox))",
-        :supports_condition_in_parens => "@supports condition (e.g. (display: flexbox))",
-        :a_n_plus_b => "An+B expression",
-        :keyframes_selector_component => "from, to, or a percentage",
-        :keyframes_selector => "keyframes selector (e.g. 10%)"
+        media_query: "media query (e.g. print, screen, print and screen)",
+        media_query_list: "media query (e.g. print, screen, print and screen)",
+        media_expr: "media expression (e.g. (min-device-width: 800px))",
+        at_root_query: "@at-root query (e.g. (without: media))",
+        at_root_directive_list: '* or identifier',
+        pseudo_args: "expression (e.g. fr, 2n+1)",
+        interp_ident: "identifier",
+        qualified_name: "identifier",
+        expr: "expression (e.g. 1px, bold)",
+        selector_comma_sequence: "selector",
+        string: "string",
+        import_arg: "file to import (string or url())",
+        moz_document_function: "matching function (e.g. url-prefix(), domain())",
+        supports_condition: "@supports condition (e.g. (display: flexbox))",
+        supports_condition_in_parens: "@supports condition (e.g. (display: flexbox))",
+        a_n_plus_b: "An+B expression",
+        keyframes_selector_component: "from, to, or a percentage",
+        keyframes_selector: "keyframes selector (e.g. 10%)"
       }
 
       TOK_NAMES = Sass::Util.to_hash(Sass::SCSS::RX.constants.map do |c|
@@ -1099,7 +1099,7 @@ module Sass
 
       def err(msg)
         throw(:_sass_parser_error, true) if @throw_error
-        raise Sass::SyntaxError.new(msg, :line => @line)
+        raise Sass::SyntaxError.new(msg, line: @line)
       end
 
       def throw_error
@@ -1120,7 +1120,7 @@ module Sass
           @line = line
           @offset = offset
           @expected = expected
-          {:pos => pos, :line => line, :expected => @expected, :block => block}
+          {pos: pos, line: line, expected: @expected, block: block}
         end
       ensure
         @throw_error = old_throw_error
@@ -1160,7 +1160,7 @@ module Sass
 
         raise Sass::SyntaxError.new(
           "Invalid CSS after \"#{after}\": expected #{expected}, was \"#{was}\"",
-          :line => line)
+          line: line)
       end
 
       # Avoid allocating lots of new strings for `#tok`.

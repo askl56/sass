@@ -166,7 +166,7 @@ class CompilerTest < MiniTest::Test
         filename =~ /\.png$/
       end
     end
-    c = watcher(:load_paths => [image_importer]) do |listener|
+    c = watcher(load_paths: [image_importer]) do |listener|
       listener.changed "image.png"
       listener.fire_events!
     end
@@ -198,7 +198,7 @@ class CompilerTest < MiniTest::Test
 
   def test_watched_directories_are_dedupped
     directories = nil
-    c = watcher(:load_paths => [".", "./foo", "."]) do |listener|
+    c = watcher(load_paths: [".", "./foo", "."]) do |listener|
       directories = listener.directories
     end
     c.watch
@@ -223,7 +223,7 @@ class CompilerTest < MiniTest::Test
   private
 
   def default_options
-    {:template_location => [[".","."]]}
+    {template_location: [[".","."]]}
   end
 
   def watcher(options = {}, &run_during_start)

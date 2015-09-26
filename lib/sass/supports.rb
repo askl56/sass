@@ -201,7 +201,7 @@ module Sass::Supports
     end
 
     def perform(env)
-      @resolved_value = value.perform(env).to_s(:quote => :none)
+      @resolved_value = value.perform(env).to_s(quote: :none)
     end
 
     def to_css

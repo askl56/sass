@@ -74,7 +74,7 @@ module Sass::Script::Value
       other_value = if other.is_a?(Sass::Script::Value::String)
                       other.value
                     else
-                      other.to_s(:quote => :none)
+                      other.to_s(quote: :none)
                     end
       Sass::Script::Value::String.new(value + other_value, type)
     end

@@ -233,7 +233,7 @@ module Sass::Script::Value
         end
 
         red, green, blue = attrs[0...3].map {|c| Sass::Util.round(c)}
-        @attrs = {:red => red, :green => green, :blue => blue}
+        @attrs = {red: red, green: green, blue: blue}
         @attrs[:alpha] = attrs[3] ? attrs[3].to_f : 1
         @representation = representation
       else
@@ -284,7 +284,7 @@ module Sass::Script::Value
       blue  = $3.ljust(2, $3).to_i(16)
 
       hex_string = "##{hex_string}" unless hex_string[0] == ?#
-      attrs = {:red => red, :green => green, :blue => blue, :representation => hex_string}
+      attrs = {red: red, green: green, blue: blue, representation: hex_string}
       attrs[:alpha] = alpha if alpha
       new(attrs)
     end
@@ -406,13 +406,13 @@ module Sass::Script::Value
     #
     # For example:
     #
-    #     Color.new([10, 20, 30]).with(:blue => 40)
+    #     Color.new([10, 20, 30]).with(blue: 40)
     #       #=> rgb(10, 40, 30)
-    #     Color.new([126, 126, 126]).with(:red => 0, :green => 255)
+    #     Color.new([126, 126, 126]).with(red: 0, green: 255)
     #       #=> rgb(0, 255, 126)
-    #     Color.new([255, 0, 127]).with(:saturation => 60)
+    #     Color.new([255, 0, 127]).with(saturation: 60)
     #       #=> rgb(204, 51, 127)
-    #     Color.new([1, 2, 3]).with(:alpha => 0.4)
+    #     Color.new([1, 2, 3]).with(alpha: 0.4)
     #       #=> rgba(1, 2, 3, 0.4)
     #
     # @param attrs [{Symbol => Numeric}]
@@ -631,7 +631,7 @@ module Sass::Script::Value
         raise Sass::SyntaxError.new("Alpha channels must be equal: #{self} #{operation} #{other}")
       end
 
-      with(:red => result[0], :green => result[1], :blue => result[2])
+      with(red: result[0], green: result[1], blue: result[2])
     end
 
     def hsl_to_rgb!

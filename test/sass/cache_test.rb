@@ -61,7 +61,7 @@ class CacheTest < MiniTest::Test
 
   def test_arbitrary_objects_can_go_into_cache
     cache = Sass::CacheStores::Memory.new
-    an_object = {:foo => :bar}
+    an_object = {foo: :bar}
     cache.store("an_object", "", an_object)
     assert_equal an_object, cache.retrieve("an_object", "")
   end
@@ -73,14 +73,14 @@ class CacheTest < MiniTest::Test
   # Regression tests
 
   def test_cache_mixin_def_splat_sass_node_with_unmarshalable_option
-    engine_with_unmarshalable_options(<<SASS, :syntax => :sass).to_tree
+    engine_with_unmarshalable_options(<<SASS, syntax: :sass).to_tree
 =color($args...)
   color: red
 SASS
   end
 
   def test_cache_mixin_def_splat_scss_node_with_unmarshalable_option
-    engine_with_unmarshalable_options(<<SCSS, :syntax => :scss).to_tree
+    engine_with_unmarshalable_options(<<SCSS, syntax: :scss).to_tree
 @mixin color($args...) {
   color: red;
 }
@@ -88,14 +88,14 @@ SCSS
   end
 
   def test_cache_function_splat_sass_node_with_unmarshalable_option
-    engine_with_unmarshalable_options(<<SASS, :syntax => :sass).to_tree
+    engine_with_unmarshalable_options(<<SASS, syntax: :sass).to_tree
 @function color($args...)
   @return red
 SASS
   end
 
   def test_cache_function_splat_scss_node_with_unmarshalable_option
-    engine_with_unmarshalable_options(<<SCSS, :syntax => :scss).to_tree
+    engine_with_unmarshalable_options(<<SCSS, syntax: :scss).to_tree
 @function color($args...) {
   @return red;
 }
@@ -103,20 +103,20 @@ SCSS
   end
 
   def test_cache_include_splat_sass_node_with_unmarshalable_option
-    engine_with_unmarshalable_options(<<SASS, :syntax => :sass).to_tree
+    engine_with_unmarshalable_options(<<SASS, syntax: :sass).to_tree
 @include color($args..., $kwargs...)
 SASS
   end
 
   def test_cache_include_splat_scss_node_with_unmarshalable_option
-    engine_with_unmarshalable_options(<<SCSS, :syntax => :scss).to_tree
+    engine_with_unmarshalable_options(<<SCSS, syntax: :scss).to_tree
 @include color($args..., $kwargs...);
 SCSS
   end
 
   private
   def root_node
-    Sass::Engine.new(<<-SCSS, :syntax => :scss).to_tree
+    Sass::Engine.new(<<-SCSS, syntax: :scss).to_tree
       @mixin color($c) { color: $c}
       div { @include color(red); }
     SCSS
@@ -124,8 +124,8 @@ SCSS
 
   def engine_with_unmarshalable_options(src, options={})
     Sass::Engine.new(src, {
-      :syntax => :scss, :object => Class.new.new, :filename => 'file.scss',
-      :importer => Sass::Importers::Filesystem.new(absolutize('templates'))
+      syntax: :scss, object: Class.new.new, filename: 'file.scss',
+      importer: Sass::Importers::Filesystem.new(absolutize('templates'))
     }.merge(options))
   end
 end

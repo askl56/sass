@@ -13,7 +13,7 @@ foo bar {
   bip: bop;
 }
 SCSS
-    assert_renders <<SASS, <<SCSS, :old => true
+    assert_renders <<SASS, <<SCSS, old: true
 foo bar
   :baz bang
   :bip bop
@@ -183,7 +183,7 @@ SCSS
   end
 
   def test_dynamic_properties_with_old
-    assert_renders <<SASS, <<SCSS, :old => true
+    assert_renders <<SASS, <<SCSS, old: true
 foo bar
   :baz 12 $bang "bip"
 SASS
@@ -1419,7 +1419,7 @@ SCSS
   end
 
   def test_old_declaration_hacks
-    assert_renders <<SASS, <<SCSS, :old => true
+    assert_renders <<SASS, <<SCSS, old: true
 foo
   :_name val
   :*name val
@@ -1461,7 +1461,7 @@ SCSS
 
   def test_disallowed_colon_hack
     assert_raise_message(Sass::SyntaxError, 'The ":name: val" hack is not allowed in the Sass indented syntax') do
-      to_sass("foo {:name: val;}", :syntax => :scss)
+      to_sass("foo {:name: val;}", syntax: :scss)
     end
   end
 
@@ -1487,7 +1487,7 @@ SCSS
   end
 
   def test_dasherize
-    assert_sass_to_scss(<<SCSS, <<SASS, :dasherize => true)
+    assert_sass_to_scss(<<SCSS, <<SASS, dasherize: true)
 @mixin under-scored-mixin($under-scored-arg: $under-scored-default) {
   bar: $under-scored-arg;
 }
@@ -1632,7 +1632,7 @@ SCSS
   end
 
   def test_indent
-    assert_renders <<SASS, <<SCSS, :indent => "    "
+    assert_renders <<SASS, <<SCSS, indent: "    "
 foo bar
     baz bang
         baz: bang
@@ -1650,7 +1650,7 @@ foo bar {
 }
 SCSS
 
-    assert_renders <<SASS, <<SCSS, :indent => "\t"
+    assert_renders <<SASS, <<SCSS, indent: "\t"
 foo bar
 	baz bang
 		baz: bang
@@ -1668,7 +1668,7 @@ foo bar {
 }
 SCSS
 
-    assert_sass_to_scss <<SCSS, <<SASS, :indent => "    "
+    assert_sass_to_scss <<SCSS, <<SASS, indent: "    "
 foo bar {
     baz bang {
         baz: bang;
@@ -1686,7 +1686,7 @@ foo bar
   blat: boo
 SASS
 
-    assert_sass_to_scss <<SCSS, <<SASS, :indent => "\t"
+    assert_sass_to_scss <<SCSS, <<SASS, indent: "\t"
 foo bar {
 	baz bang {
 		baz: bang;
@@ -1704,7 +1704,7 @@ foo bar
   blat: boo
 SASS
 
-    assert_scss_to_sass <<SASS, <<SCSS, :indent => "    "
+    assert_scss_to_sass <<SASS, <<SCSS, indent: "    "
 foo bar
     baz bang
         baz: bang
@@ -1722,7 +1722,7 @@ foo bar {
 }
 SCSS
 
-    assert_scss_to_sass <<SASS, <<SCSS, :indent => "\t"
+    assert_scss_to_sass <<SASS, <<SCSS, indent: "\t"
 foo bar
 	baz bang
 		baz: bang
@@ -2038,7 +2038,7 @@ SCSS
   end
 
   def test_comment_indentation
-    assert_renders(<<SASS, <<SCSS, :indent => '    ')
+    assert_renders(<<SASS, <<SCSS, indent: '    ')
 foo
     // bar
     /* baz
@@ -2053,17 +2053,17 @@ SCSS
   end
 
   def test_keyword_arguments
-    assert_renders(<<SASS, <<SCSS, :dasherize => true)
+    assert_renders(<<SASS, <<SCSS, dasherize: true)
 $foo: foo($dash-ed: 2px)
 SASS
 $foo: foo($dash-ed: 2px);
 SCSS
-    assert_scss_to_sass(<<SASS, <<SCSS, :dasherize => true)
+    assert_scss_to_sass(<<SASS, <<SCSS, dasherize: true)
 $foo: foo($dash-ed: 2px)
 SASS
 $foo: foo($dash_ed: 2px);
 SCSS
-    assert_sass_to_scss(<<SCSS, <<SASS, :dasherize => true)
+    assert_sass_to_scss(<<SCSS, <<SASS, dasherize: true)
 $foo: foo($dash-ed: 2px);
 SCSS
 $foo: foo($dash_ed: 2px)
@@ -2081,7 +2081,7 @@ SCSS
   end
 
   def test_ambiguous_negation
-    assert_renders(<<SASS, <<SCSS, :indent => '    ')
+    assert_renders(<<SASS, <<SCSS, indent: '    ')
 foo
     ok: -$foo
     comma: 10px, -$foo
@@ -2120,7 +2120,7 @@ SCSS
   end
 
   def assert_scss_to_sass(sass, scss, options = {})
-    assert_equal(sass.rstrip, to_sass(scss, options.merge(:syntax => :scss)).rstrip,
+    assert_equal(sass.rstrip, to_sass(scss, options.merge(syntax: :scss)).rstrip,
       "Expected SCSS to transform to Sass")
   end
 
@@ -2133,7 +2133,7 @@ SCSS
     in_scss ||= scss
     options ||= {}
 
-    assert_equal(scss.rstrip, to_scss(in_scss, options.merge(:syntax => :scss)).rstrip,
+    assert_equal(scss.rstrip, to_scss(in_scss, options.merge(syntax: :scss)).rstrip,
       "Expected SCSS to transform to #{scss == in_scss ? 'itself' : 'SCSS'}")
   end
 

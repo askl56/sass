@@ -33,9 +33,9 @@ class MockImporter < Sass::Importers::Base
 
   def add_import(uri, contents, syntax = :scss, mtime = Time.now - 10)
     @imports[uri] = {
-      :contents => contents,
-      :mtime => mtime,
-      :syntax => syntax
+      contents: contents,
+      mtime: mtime,
+      syntax: syntax
     }
   end
 

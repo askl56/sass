@@ -313,7 +313,7 @@ module Sass::Plugin
       # a deprecated feature is removed. It may be removed without warning.
       listener_args = directories +
                       Array(options[:additional_watch_paths]) +
-                      [{:relative_paths => false}]
+                      [{relative_paths: false}]
 
       # The native windows listener is much slower than the polling option, according to
       # https://github.com/nex3/sass/commit/a3031856b22bc834a5417dedecb038b7be9b9e3e
@@ -480,9 +480,9 @@ module Sass::Plugin
 
       begin
         File.read(filename) unless File.readable?(filename) # triggers an error for handling
-        engine_opts = engine_options(:css_filename => css,
-                                     :filename => filename,
-                                     :sourcemap_filename => sourcemap)
+        engine_opts = engine_options(css_filename: css,
+                                     filename: filename,
+                                     sourcemap_filename: sourcemap)
         mapping = nil
         run_compilation_starting(filename, css, sourcemap)
         engine = Sass::Engine.for_file(filename, engine_opts)
@@ -501,7 +501,7 @@ module Sass::Plugin
       write_file(css, rendered)
       if mapping
         write_file(sourcemap, mapping.to_json(
-            :css_path => css, :sourcemap_path => sourcemap, :type => options[:sourcemap]))
+            css_path: css, sourcemap_path: sourcemap, type: options[:sourcemap]))
       end
       run_updated_stylesheet(filename, css, sourcemap) unless compilation_error_occured
     end
@@ -537,7 +537,7 @@ module Sass::Plugin
 
     def normalized_load_paths
       @normalized_load_paths ||=
-        Sass::Engine.normalize_options(:load_paths => load_paths)[:load_paths]
+        Sass::Engine.normalize_options(load_paths: load_paths)[:load_paths]
     end
 
     def load_paths(opts = options)

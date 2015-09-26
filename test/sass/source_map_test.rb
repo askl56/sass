@@ -7,8 +7,8 @@ class SourcemapTest < MiniTest::Test
   def test_to_json_requires_args
     _, sourcemap = render_with_sourcemap('')
     assert_raises(ArgumentError) {sourcemap.to_json({})}
-    assert_raises(ArgumentError) {sourcemap.to_json({:css_path => 'foo'})}
-    assert_raises(ArgumentError) {sourcemap.to_json({:sourcemap_path => 'foo'})}
+    assert_raises(ArgumentError) {sourcemap.to_json({css_path: 'foo'})}
+    assert_raises(ArgumentError) {sourcemap.to_json({sourcemap_path: 'foo'})}
   end
 
   def test_simple_mapping_scss
@@ -37,7 +37,7 @@ JSON
   end
 
   def test_simple_mapping_sass
-    assert_parses_with_sourcemap <<SASS, <<CSS, <<JSON, :syntax => :sass
+    assert_parses_with_sourcemap <<SASS, <<CSS, <<JSON, syntax: :sass
 a
   foo: bar
   /* SOME COMMENT */
@@ -62,7 +62,7 @@ JSON
 
   def test_simple_mapping_with_file_uris
     uri = Sass::Util.file_uri_from_path(Sass::Util.absolute_path(filename_for_test(:scss)))
-    assert_parses_with_sourcemap <<SCSS, <<CSS, <<JSON, :sourcemap => :file
+    assert_parses_with_sourcemap <<SCSS, <<CSS, <<JSON, sourcemap: :file
 a {
   foo: bar;
 /* SOME COMMENT */
@@ -87,7 +87,7 @@ JSON
   end
 
   def test_mapping_with_directory_scss
-    options = {:filename => "scss/style.scss", :output => "css/style.css"}
+    options = {filename: "scss/style.scss", output: "css/style.css"}
     assert_parses_with_sourcemap <<SCSS, <<CSS, <<JSON, options
 a {
   foo: bar;
@@ -113,7 +113,7 @@ JSON
   end
 
   def test_mapping_with_directory_sass
-    options = {:filename => "sass/style.sass", :output => "css/style.css", :syntax => :sass}
+    options = {filename: "sass/style.sass", output: "css/style.css", syntax: :sass}
     assert_parses_with_sourcemap <<SASS, <<CSS, <<JSON, options
 a
   foo: bar
@@ -161,7 +161,7 @@ JSON
     end
 
     def test_simple_charset_mapping_sass
-      assert_parses_with_sourcemap <<SASS, <<CSS, <<JSON, :syntax => :sass
+      assert_parses_with_sourcemap <<SASS, <<CSS, <<JSON, syntax: :sass
 a
   fóó: bár
 SASS
@@ -205,7 +205,7 @@ JSON
     end
 
     def test_different_charset_than_encoding_sass
-      assert_parses_with_sourcemap(<<SASS.force_encoding("IBM866"), <<CSS, <<JSON, :syntax => :sass)
+      assert_parses_with_sourcemap(<<SASS.force_encoding("IBM866"), <<CSS, <<JSON, syntax: :sass)
 @charset "IBM866"
 f\x86\x86
   \x86: b
@@ -242,7 +242,7 @@ CSS
   end
 
   def test_import_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 @import {{1}}foo.css{{/1}},{{2}}moo.css{{/2}},      {{3}}bar.css{{/3}}
 @import {{4}}url(baz.css){{/4}}
 @import {{5}}url(qux.css) screen print{{/5}}
@@ -274,7 +274,7 @@ CSS
   end
 
   def test_media_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 {{1}}@media screen, tv{{/1}}
   {{2}}body{{/2}}
     {{3}}max-width{{/3}}: {{4}}1070px{{/4}}
@@ -318,7 +318,7 @@ CSS
   end
 
   def test_interpolation_and_vars_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 $te: "te"
 $teal: {{5}}teal{{/5}}
 {{1}}p{{/1}}
@@ -394,7 +394,7 @@ CSS
   end
 
   def test_selectors_properties_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 $width: 2px
 $translucent-red: rgba(255, 0, 0, 0.5)
 {{1}}a{{/1}}
@@ -459,7 +459,7 @@ CSS
   end
 
   def test_extend_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 {{1}}.error{{/1}}
   {{2}}border{{/2}}: {{3}}1px #f00{{/3}}
   {{4}}background-color{{/4}}: {{5}}#fdd{{/5}}
@@ -499,7 +499,7 @@ CSS
   end
 
   def test_for_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 @for $i from 1 through 3
   {{1}}{{4}}{{7}}.item-#{$i}{{/1}}{{/4}}{{/7}}
     {{2}}{{5}}{{8}}width{{/2}}{{/5}}{{/8}}: {{3}}{{6}}{{9}}2em * $i{{/3}}{{/6}}{{/9}}
@@ -539,7 +539,7 @@ CSS
   end
 
   def test_while_sourcemap_sass
-  assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+  assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 $i: 6
 @while $i > 0
   {{1}}{{4}}{{7}}.item-#{$i}{{/1}}{{/4}}{{/7}}
@@ -584,7 +584,7 @@ CSS
   end
 
   def test_each_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 @each $animal in puma, sea-slug, egret, salamander
   {{1}}{{4}}{{7}}{{10}}.#{$animal}-icon{{/1}}{{/4}}{{/7}}{{/10}}
     {{2}}{{5}}{{8}}{{11}}background-image{{/2}}{{/5}}{{/8}}{{/11}}: {{3}}{{6}}{{9}}{{12}}url('/images/#{$animal}.png'){{/3}}{{/6}}{{/9}}{{/12}}
@@ -667,7 +667,7 @@ CSS
   end
 
 def test_mixin_sourcemap_sass
-  assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+  assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 =large-text
   :font
     {{2}}size{{/2}}: {{3}}20px{{/3}}
@@ -741,7 +741,7 @@ CSS
   end
 
   def test_function_sourcemap_sass
-    assert_parses_with_mapping <<'SASS', <<'CSS', :syntax => :sass
+    assert_parses_with_mapping <<'SASS', <<'CSS', syntax: :sass
 $grid-width: 20px
 $gutter-width: 5px
 
@@ -761,7 +761,7 @@ CSS
   # Regression tests
 
   def test_properties_sass
-    assert_parses_with_mapping <<SASS, <<CSS, :syntax => :sass
+    assert_parses_with_mapping <<SASS, <<CSS, syntax: :sass
 {{1}}.foo{{/1}}
   :{{2}}name{{/2}} {{3}}value{{/3}}
   {{4}}name{{/4}}: {{5}}value{{/5}}
@@ -779,7 +779,7 @@ CSS
   end
 
   def test_multiline_script_scss
-    assert_parses_with_mapping <<SCSS, <<CSS, :syntax => :scss
+    assert_parses_with_mapping <<SCSS, <<CSS, syntax: :scss
 $var: {{3}}foo +
     bar{{/3}}; {{1}}x {{/1}}{ {{2}}y{{/2}}: $var }
 SCSS
@@ -791,7 +791,7 @@ CSS
   end
 
   def test_multiline_interpolation_source_range
-    engine = Sass::Engine.new(<<-SCSS, :cache => false, :syntax => :scss)
+    engine = Sass::Engine.new(<<-SCSS, cache: false, syntax: :scss)
 p {
   filter: progid:DXImageTransform(
           '\#{123}');
@@ -810,7 +810,7 @@ SCSS
   end
 
   def test_list_source_range
-    engine = Sass::Engine.new(<<-SCSS, :cache => false, :syntax => :scss)
+    engine = Sass::Engine.new(<<-SCSS, cache: false, syntax: :scss)
 @each $a, $b in (1, 2), (2, 4), (3, 6) { }
 SCSS
     list = engine.to_tree.children.first.list
@@ -834,7 +834,7 @@ SCSS
         Sass::Source::Position.new(0, 10),
         nil, nil))
 
-    json = map.to_json(:css_path => 'output file.css', :sourcemap_path => 'output file.css.map')
+    json = map.to_json(css_path: 'output file.css', sourcemap_path: 'output file.css.map')
     assert_equal json, <<JSON.rstrip
 {
 "version": 3,
@@ -945,7 +945,7 @@ MESSAGE
     rendered, sourcemap = render_with_sourcemap(source, options)
     css_path = options[:output] || "test.css"
     sourcemap_path = Sass::Util.sourcemap_name(css_path)
-    rendered_json = sourcemap.to_json(:css_path => css_path, :sourcemap_path => sourcemap_path, :type => options[:sourcemap])
+    rendered_json = sourcemap.to_json(css_path: css_path, sourcemap_path: sourcemap_path, type: options[:sourcemap])
 
     assert_equal css.rstrip, rendered.rstrip
     assert_equal sourcemap_json.rstrip, rendered_json

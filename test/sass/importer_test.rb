@@ -24,7 +24,7 @@ class ImporterTest < MiniTest::Test
           color: $#{fruit}-color;
         }
       }
-      Sass::Engine.new(contents, :filename => name, :syntax => :scss, :importer => self)
+      Sass::Engine.new(contents, filename: name, syntax: :scss, importer: self)
     end
 
     def key(name, context)
@@ -76,9 +76,9 @@ class ImporterTest < MiniTest::Test
         Sass::Engine.new(
           %Q[@import "#{@mappings[name]}";],
           options.merge(
-            :filename => name,
-            :syntax => :scss,
-            :importer => self
+            filename: name,
+            syntax: :scss,
+            importer: self
           )
         )
       end
@@ -109,9 +109,9 @@ class ImporterTest < MiniTest::Test
         Sass::Engine.new(
           %Q[.#{name}{#{@mappings[name]}}],
           options.merge(
-            :filename => name,
-            :syntax => :scss,
-            :importer => self
+            filename: name,
+            syntax: :scss,
+            importer: self
           )
         )
       end
@@ -142,7 +142,7 @@ class ImporterTest < MiniTest::Test
 
 .pear { color: green; }
 CSS
-    options = {:style => :compact, :load_paths => [FruitImporter.new], :syntax => :scss}
+    options = {style: :compact, load_paths: [FruitImporter.new], syntax: :scss}
     assert_equal css_file, Sass::Engine.new(scss_file, options).render
   end
 
@@ -163,7 +163,7 @@ CSS
 
 .bar { reversed: true; }
 CSS
-    options = {:style => :compact, :load_paths => [ReversedExtImporter.new(absolutize("tmp"))], :syntax => :scss}
+    options = {style: :compact, load_paths: [ReversedExtImporter.new(absolutize("tmp"))], syntax: :scss}
     assert_equal css_file, Sass::Engine.new(scss_file, options).render
   ensure
     FileUtils.rm_rf(absolutize("tmp"))
@@ -179,11 +179,11 @@ CSS
     class_importer = ClassImporter.new({"pear" => %Q{color: green;}}, {"pear" => Time.now + 1})
 
     options = {
-      :style => :compact,
-      :filename => fixture_file("test_staleness_check_across_importers.scss"),
-      :importer => file_system_importer,
-      :load_paths => [file_system_importer, indirect_importer, class_importer],
-      :syntax => :scss
+      style: :compact,
+      filename: fixture_file("test_staleness_check_across_importers.scss"),
+      importer: file_system_importer,
+      load_paths: [file_system_importer, indirect_importer, class_importer],
+      syntax: :scss
     }
 
     assert_equal File.read(fixture_file("test_staleness_check_across_importers.css")),
@@ -202,9 +202,9 @@ CSS
     fruit_importer = FruitImporter.new
 
     options = {
-      :filename => 'fruits/orange',
-      :importer => fruit_importer,
-      :syntax => :scss
+      filename: 'fruits/orange',
+      importer: fruit_importer,
+      syntax: :scss
     }
 
     engine = Sass::Engine.new(<<SCSS, options)
@@ -214,7 +214,7 @@ CSS
 SCSS
 
     _, sourcemap = engine.render_with_sourcemap('sourcemap_uri')
-    assert_equal <<JSON.strip, sourcemap.to_json(:css_uri => 'css_uri')
+    assert_equal <<JSON.strip, sourcemap.to_json(css_uri: 'css_uri')
 {
 "version": 3,
 "mappings": "AAAA,QAAS;EACP,KAAK,EAAE,IAAI",
@@ -233,12 +233,12 @@ JSON
     end
 
     options = {
-      :filename => filename_for_test,
-      :sourcemap_filename => sourcemap_filename_for_test,
-      :importer => mock_importer,
-      :syntax => :scss,
-      :load_paths => [ephemeral_importer],
-      :cache => false
+      filename: filename_for_test,
+      sourcemap_filename: sourcemap_filename_for_test,
+      importer: mock_importer,
+      syntax: :scss,
+      load_paths: [ephemeral_importer],
+      cache: false
     }
 
     engine = Sass::Engine.new(<<SCSS, options)
@@ -255,7 +255,7 @@ SCSS
 
 /*# sourceMappingURL=sourcemap_uri */
 CSS
-    map = sourcemap.to_json(:css_uri => 'css_uri')
+    map = sourcemap.to_json(css_uri: 'css_uri')
     assert_equal <<JSON.strip, map
 {
 "version": 3,
@@ -270,10 +270,10 @@ JSON
   def test_source_map_with_only_css_uri_falls_back_to_file_uris
     file_system_importer = Sass::Importers::Filesystem.new('.')
     options = {
-      :filename => filename_for_test(:scss),
-      :sourcemap_filename => sourcemap_filename_for_test,
-      :importer => file_system_importer,
-      :syntax => :scss
+      filename: filename_for_test(:scss),
+      sourcemap_filename: sourcemap_filename_for_test,
+      importer: file_system_importer,
+      syntax: :scss
     }
 
     engine = Sass::Engine.new(<<SCSS, options)
@@ -283,7 +283,7 @@ SCSS
     _, sourcemap = engine.render_with_sourcemap('http://1.example.com/style.map')
 
     uri = Sass::Util.file_uri_from_path(Sass::Util.absolute_path(filename_for_test(:scss)))
-    assert_equal <<JSON.strip, sourcemap.to_json(:css_uri => 'css_uri')
+    assert_equal <<JSON.strip, sourcemap.to_json(css_uri: 'css_uri')
 {
 "version": 3,
 "mappings": "AAAA,IAAK;EAAC,CAAC,EAAE,CAAC",
@@ -297,10 +297,10 @@ JSON
   def test_source_map_with_css_uri_and_css_path_falls_back_to_file_uris
     file_system_importer = Sass::Importers::Filesystem.new('.')
     options = {
-      :filename => filename_for_test(:scss),
-      :sourcemap_filename => sourcemap_filename_for_test,
-      :importer => file_system_importer,
-      :syntax => :scss
+      filename: filename_for_test(:scss),
+      sourcemap_filename: sourcemap_filename_for_test,
+      importer: file_system_importer,
+      syntax: :scss
     }
 
     engine = Sass::Engine.new(<<SCSS, options)
@@ -310,7 +310,7 @@ SCSS
     _, sourcemap = engine.render_with_sourcemap('http://1.example.com/style.map')
 
     uri = Sass::Util.file_uri_from_path(Sass::Util.absolute_path(filename_for_test(:scss)))
-    assert_equal <<JSON.strip, sourcemap.to_json(:css_uri => 'css_uri', :css_path => 'css_path')
+    assert_equal <<JSON.strip, sourcemap.to_json(css_uri: 'css_uri', css_path: 'css_path')
 {
 "version": 3,
 "mappings": "AAAA,IAAK;EAAC,CAAC,EAAE,CAAC",
@@ -326,10 +326,10 @@ JSON
     css_uri = 'css_uri'
     sourcemap_path = 'map/style.map'
     options = {
-      :filename => 'sass/style.scss',
-      :sourcemap_filename => sourcemap_path,
-      :importer => file_system_importer,
-      :syntax => :scss
+      filename: 'sass/style.scss',
+      sourcemap_filename: sourcemap_path,
+      importer: file_system_importer,
+      syntax: :scss
     }
 
     engine = Sass::Engine.new(<<SCSS, options)
@@ -340,7 +340,7 @@ SCSS
 
 
     rendered, sourcemap = engine.render_with_sourcemap('http://map.example.com/map/style.map')
-    assert_equal <<JSON.strip, sourcemap.to_json(:css_uri => css_uri, :sourcemap_path => sourcemap_path)
+    assert_equal <<JSON.strip, sourcemap.to_json(css_uri: css_uri, sourcemap_path: sourcemap_path)
 {
 "version": 3,
 "mappings": "AAAA,IAAK;EAAC,CAAC,EAAE,CAAC",
@@ -357,10 +357,10 @@ JSON
     css_path = 'static/style.css'
     sourcemap_path = 'map/style.map'
     options = {
-      :filename => sass_path,
-      :sourcemap_filename => sourcemap_path,
-      :importer => file_system_importer,
-      :syntax => :scss
+      filename: sass_path,
+      sourcemap_filename: sourcemap_path,
+      importer: file_system_importer,
+      syntax: :scss
     }
 
     engine = Sass::Engine.new(<<SCSS, options)
@@ -368,7 +368,7 @@ JSON
 SCSS
 
     _, sourcemap = engine.render_with_sourcemap('http://map.example.com/map/style.map')
-    assert_equal <<JSON.strip, sourcemap.to_json(:css_path => css_path, :sourcemap_path => sourcemap_path)
+    assert_equal <<JSON.strip, sourcemap.to_json(css_path: css_path, sourcemap_path: sourcemap_path)
 {
 "version": 3,
 "mappings": "AAAA,IAAK;EAAC,CAAC,EAAE,CAAC",
@@ -381,7 +381,7 @@ JSON
 
   def test_render_with_sourcemap_requires_filename
     file_system_importer = Sass::Importers::Filesystem.new('.')
-    engine = Sass::Engine.new(".foo {a: b}", :syntax => :scss, :importer => file_system_importer)
+    engine = Sass::Engine.new(".foo {a: b}", syntax: :scss, importer: file_system_importer)
     assert_raise_message(Sass::SyntaxError, <<MESSAGE) {engine.render_with_sourcemap('sourcemap_url')}
 Error generating source map: couldn't determine public URL for the source stylesheet.
   No filename is available so there's nothing for the source map to link to.

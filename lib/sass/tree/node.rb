@@ -231,7 +231,7 @@ module Sass
       def balance(*args)
         res = Sass::Shared.balance(*args)
         return res if res
-        raise Sass::SyntaxError.new("Unbalanced brackets.", :line => line)
+        raise Sass::SyntaxError.new("Unbalanced brackets.", line: line)
       end
     end
   end

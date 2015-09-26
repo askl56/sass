@@ -711,7 +711,7 @@ SCSS
   end
 
   def test_unknown_directive_bubbling
-    assert_equal(<<CSS, render(<<SCSS, :style => :nested))
+    assert_equal(<<CSS, render(<<SCSS, style: :nested))
 @fblthp {
   .foo .bar {
     a: b; } }
@@ -725,7 +725,7 @@ SCSS
   end
 
   def test_keyframe_bubbling
-    assert_equal(<<CSS, render(<<SCSS, :style => :nested))
+    assert_equal(<<CSS, render(<<SCSS, style: :nested))
 @keyframes spin {
   0% {
     transform: rotate(0deg); } }
@@ -3998,7 +3998,7 @@ SCSS
 
 
   def test_newlines_removed_from_selectors_when_compressed
-    assert_equal <<CSS, render(<<SCSS, :style => :compressed)
+    assert_equal <<CSS, render(<<SCSS, style: :compressed)
 z a,z b{display:block}
 CSS
 a
@@ -4074,7 +4074,7 @@ SCSS
   end
 
   def test_options_passed_to_script
-    assert_equal <<CSS, render(<<SCSS, :style => :compressed)
+    assert_equal <<CSS, render(<<SCSS, style: :compressed)
 foo{color:#000}
 CSS
 foo {color: darken(black, 10%)}

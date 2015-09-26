@@ -6,16 +6,16 @@ unless defined?(Sass::RAILS_LOADED)
     def default_options
       return @default_options if @default_options
       opts = {
-        :quiet             => Sass::Util.rails_env != "production",
-        :full_exception    => Sass::Util.rails_env != "production",
-        :cache_location    => Sass::Util.rails_root + '/tmp/sass-cache'
+        quiet: Sass::Util.rails_env != "production",
+        full_exception: Sass::Util.rails_env != "production",
+        cache_location: Sass::Util.rails_root + '/tmp/sass-cache'
       }
 
       opts.merge!(
-        :always_update     => false,
-        :template_location => Sass::Util.rails_root + '/public/stylesheets/sass',
-        :css_location      => Sass::Util.rails_root + '/public/stylesheets',
-        :always_check      => Sass::Util.rails_env == "development")
+        always_update: false,
+        template_location: Sass::Util.rails_root + '/public/stylesheets/sass',
+        css_location: Sass::Util.rails_root + '/public/stylesheets',
+        always_check: Sass::Util.rails_env == "development")
 
       @default_options = opts.freeze
     end

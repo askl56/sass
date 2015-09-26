@@ -64,11 +64,11 @@ module Sass
         end
         raise SyntaxError.new(lines.join("\n"))
       rescue SyntaxError => e
-        raise SyntaxError.new(e.message, :line => line, :filename => @filename)
+        raise SyntaxError.new(e.message, line: line, filename: @filename)
       end
 
       def options_for_importer
-        @options.merge(:_from_import_node => true)
+        @options.merge(_from_import_node: true)
       end
     end
   end

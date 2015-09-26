@@ -97,7 +97,7 @@ MSG
     #   without any separation
     def plus(other)
       type = other.is_a?(Sass::Script::Value::String) ? other.type : :identifier
-      Sass::Script::Value::String.new(to_s(:quote => :none) + other.to_s(:quote => :none), type)
+      Sass::Script::Value::String.new(to_s(quote: :none) + other.to_s(quote: :none), type)
     end
 
     # The SassScript `-` operation.

@@ -50,7 +50,7 @@ module Sass
         expr.options = @options
         node(expr, start_pos)
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -64,7 +64,7 @@ module Sass
         expr.options = @options
         expr
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -81,7 +81,7 @@ module Sass
         expr.options = @options
         expr
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -108,7 +108,7 @@ module Sass
         kwarg_splat.options = @options if kwarg_splat
         return args, keywords, splat, kwarg_splat
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -128,7 +128,7 @@ module Sass
         splat.options = @options if splat
         return args, splat
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -148,7 +148,7 @@ module Sass
         splat.options = @options if splat
         return args, splat
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -169,7 +169,7 @@ module Sass
         @lexer.unpeek!
         expr
       rescue Sass::SyntaxError => e
-        e.modify_backtrace :line => @lexer.line, :filename => @options[:filename]
+        e.modify_backtrace line: @lexer.line, filename: @options[:filename]
         raise e
       end
 
@@ -557,12 +557,12 @@ RUBY
       # but detecting the method/token difference turns out to be quite expensive.
 
       EXPR_NAMES = {
-        :string => "string",
-        :default => "expression (e.g. 1px, bold)",
-        :mixin_arglist => "mixin argument",
-        :fn_arglist => "function argument",
-        :splat => "...",
-        :special_fun => '")"',
+        string: "string",
+        default: "expression (e.g. 1px, bold)",
+        mixin_arglist: "mixin argument",
+        fn_arglist: "function argument",
+        splat: "...",
+        special_fun: '")"',
       }
 
       def assert_expr(name, expected = nil)

@@ -10,9 +10,9 @@ module Sass
     # ## Customize
     #
     #     Sass::Plugin.options.merge(
-    #       :cache_location => './tmp/sass-cache',
-    #       :never_update => environment != :production,
-    #       :full_exception => environment != :production)
+    #       cache_location: './tmp/sass-cache',
+    #       never_update: environment != :production,
+    #       full_exception: environment != :production)
     #
     # {file:SASS_REFERENCE.md#options See the Reference for more options}.
     #

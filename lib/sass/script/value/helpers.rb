@@ -32,7 +32,7 @@ module Sass::Script::Value
     #
     # @return [Sass::Script::Value::Color] the color object
     def hsl_color(hue, saturation, lightness, alpha = nil)
-      attrs = {:hue => hue, :saturation => saturation, :lightness => lightness}
+      attrs = {hue: hue, saturation: saturation, lightness: lightness}
       attrs[:alpha] = alpha if alpha
       Color.new(attrs)
     end
@@ -46,7 +46,7 @@ module Sass::Script::Value
     #
     # @return [Sass::Script::Value::Color] the color object
     def rgb_color(red, green, blue, alpha = nil)
-      attrs = {:red => red, :green => green, :blue => blue}
+      attrs = {red: red, green: green, blue: blue}
       attrs[:alpha] = alpha if alpha
       Color.new(attrs)
     end

@@ -96,7 +96,7 @@ module Sass::Tree
     #
     # @param opts [{Symbol => Object}] The options hash for the tree.
     # @param fmt [Symbol] `:scss` or `:sass`.
-    def declaration(opts = {:old => @prop_syntax == :old}, fmt = :sass)
+    def declaration(opts = {old: @prop_syntax == :old}, fmt = :sass)
       name = self.name.map {|n| n.is_a?(String) ? n : n.to_sass(opts)}.join
       if name[0] == ?:
         raise Sass::SyntaxError.new("The \"#{name}: #{self.class.val_to_sass(value, opts)}\"" +
@@ -122,7 +122,7 @@ module Sass::Tree
       if @options[:property_syntax] && @options[:property_syntax] != @prop_syntax
         raise Sass::SyntaxError.new(
           "Illegal property syntax: can't use #{@prop_syntax} syntax when " +
-          ":property_syntax => #{@options[:property_syntax].inspect} is set.")
+          "property_syntax: #{@options[:property_syntax].inspect} is set.")
       end
     end
 

@@ -35,7 +35,7 @@ module Sass
 
       # @see Base#store
       def store(key, sha, obj)
-        @contents[key] = {:sha => sha, :obj => obj}
+        @contents[key] = {sha: sha, obj: obj}
       end
 
       # Destructively clear the cache.

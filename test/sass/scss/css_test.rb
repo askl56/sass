@@ -1214,7 +1214,7 @@ SCSS
   end
 
   def test_closing_line_comment_end_with_compact_output
-    assert_equal(<<CSS, render(<<SCSS, :style => :compact))
+    assert_equal(<<CSS, render(<<SCSS, style: :compact))
 /* foo */
 bar { baz: bang; }
 CSS

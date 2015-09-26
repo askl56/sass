@@ -22,7 +22,7 @@ class Sass::Tree::Visitors::Cssize < Sass::Tree::Visitors::Base
   def visit(node)
     super(node)
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 
@@ -132,8 +132,8 @@ class Sass::Tree::Visitors::Cssize < Sass::Tree::Visitors::Base
   def visit_import(node)
     visit_children_without_parent(node)
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => node.children.first.filename)
-    e.add_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(filename: node.children.first.filename)
+    e.add_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 
@@ -141,8 +141,8 @@ class Sass::Tree::Visitors::Cssize < Sass::Tree::Visitors::Base
   def visit_trace(node)
     visit_children_without_parent(node)
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:mixin => node.name, :filename => node.filename, :line => node.line)
-    e.add_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(mixin: node.name, filename: node.filename, line: node.line)
+    e.add_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 

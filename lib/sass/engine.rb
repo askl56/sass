@@ -156,12 +156,12 @@ module Sass
     # The default options for Sass::Engine.
     # @api public
     DEFAULT_OPTIONS = {
-      :style => :nested,
-      :load_paths => [],
-      :cache => true,
-      :cache_location => './.sass-cache',
-      :syntax => :sass,
-      :filesystem_importer => Sass::Importers::Filesystem
+      style: :nested,
+      load_paths: [],
+      cache: true,
+      cache_location: './.sass-cache',
+      syntax: :sass,
+      filesystem_importer: Sass::Importers::Filesystem
     }.freeze
 
     # Converts a Sass options hash into a standard form, filling in
@@ -231,12 +231,12 @@ module Sass
       if had_syntax
         # Use what was explicitly specificed
       elsif filename =~ /\.scss$/
-        options.merge!(:syntax => :scss)
+        options.merge!(syntax: :scss)
       elsif filename =~ /\.sass$/
-        options.merge!(:syntax => :sass)
+        options.merge!(syntax: :sass)
       end
 
-      Sass::Engine.new(File.read(filename), options.merge(:filename => filename))
+      Sass::Engine.new(File.read(filename), options.merge(filename: filename))
     end
 
     # The options for the Sass engine.
@@ -418,7 +418,7 @@ ERR
       end
       root
     rescue SyntaxError => e
-      e.modify_backtrace(:filename => @options[:filename], :line => @line)
+      e.modify_backtrace(filename: @options[:filename], line: @line)
       e.sass_template = @template
       raise e
     end
@@ -456,10 +456,10 @@ ERR
           tab_str ||= line_tab_str
 
           raise SyntaxError.new("Indenting at the beginning of the document is illegal.",
-            :line => index) if first
+            line: index) if first
 
           raise SyntaxError.new("Indentation can't use both tabs and spaces.",
-            :line => index) if tab_str.include?(?\s) && tab_str.include?(?\t)
+            line: index) if tab_str.include?(?\s) && tab_str.include?(?\t)
         end
         first &&= !tab_str.nil?
         if tab_str.nil?
@@ -480,7 +480,7 @@ ERR
 Inconsistent indentation: #{Sass::Shared.human_indentation line_tab_str, true} used for indentation,
 but the rest of the document was indented using #{Sass::Shared.human_indentation tab_str}.
 END
-          raise SyntaxError.new(message, :line => index)
+          raise SyntaxError.new(message, line: index)
         end
 
         lines << Line.new(line.strip, line_tabs, index, line_tab_str.size, @options[:filename], [])
@@ -497,7 +497,7 @@ END
       # than the normal indentation
       return unless line =~ /^#{tab_str}\s/
       unless line =~ /^(?:#{comment_tab_str})(.*)$/
-        raise SyntaxError.new(<<MSG.strip.gsub("\n", " "), :line => index)
+        raise SyntaxError.new(<<MSG.strip.gsub("\n", " "), line: index)
 Inconsistent indentation:
 previous line was indented by #{Sass::Shared.human_indentation comment_tab_str},
 but this line was indented by #{Sass::Shared.human_indentation line[/^\s*/]}.
@@ -518,7 +518,7 @@ MSG
         if line.tabs > base
           raise SyntaxError.new(
             "The line was indented #{line.tabs - base} levels deeper than the previous line.",
-            :line => line.index) if line.tabs > base + 1
+            line: line.index) if line.tabs > base + 1
 
           nodes.last.children, i = tree(arr, i)
         else
@@ -622,7 +622,7 @@ WARNING
           name_start_offset = line.offset + 1 # +1 for the leading ':'
           name, value = line.text.scan(PROPERTY_OLD)[0]
           raise SyntaxError.new("Invalid property: \"#{line.text}\".",
-            :line => @line) if name.nil? || value.nil?
+            line: @line) if name.nil? || value.nil?
 
           value_start_offset = name_end_offset = name_start_offset + name.length
           unless value.empty?
@@ -717,7 +717,7 @@ WARNING
         expr = Sass::Script::Tree::Literal.new(Sass::Script::Value::String.new(""))
         end_offset = start_offset
       else
-        expr = parse_script(value, :offset => to_parser_offset(start_offset))
+        expr = parse_script(value, offset: to_parser_offset(start_offset))
         end_offset = expr.source_range.end_pos.offset - 1
       end
       node = Tree::PropNode.new(parse_interp(name), expr, prop)
@@ -737,12 +737,12 @@ WARNING
     def parse_variable(line)
       name, value, flags = line.text.scan(Script::MATCH)[0]
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath variable declarations.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       raise SyntaxError.new("Invalid variable: \"#{line.text}\".",
-        :line => @line) unless name && value
+        line: @line) unless name && value
       flags = flags ? flags.split(/\s+/) : []
       if (invalid_flag = flags.find {|f| f != '!default' && f != '!global'})
-        raise SyntaxError.new("Invalid flag \"#{invalid_flag}\".", :line => @line)
+        raise SyntaxError.new("Invalid flag \"#{invalid_flag}\".", line: @line)
       end
 
       # This workaround is needed for the case when the variable value is part of the identifier,
@@ -750,7 +750,7 @@ WARNING
       # $red_color: red;
       var_lhs_length = 1 + name.length # 1 stands for '$'
       index = line.text.index(value, line.offset + var_lhs_length) || 0
-      expr = parse_script(value, :offset => to_parser_offset(line.offset + index))
+      expr = parse_script(value, offset: to_parser_offset(line.offset + index))
 
       Tree::VariableNode.new(name, expr, flags.include?('!default'), flags.include?('!global'))
     end
@@ -763,7 +763,7 @@ WARNING
           value = [line.text]
         else
           value = self.class.parse_interp(
-            line.text, line.index, to_parser_offset(line.offset), :filename => @filename)
+            line.text, line.index, to_parser_offset(line.offset), filename: @filename)
         end
         value = Sass::Util.with_extracted_values(value) do |str|
           str = str.gsub(/^#{line.comment_tab_str}/m, '')[2..-1] # get rid of // or /*
@@ -810,34 +810,34 @@ WARNING
 
     def parse_while_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid while directive '@while': expected expression.") unless value
-      Tree::WhileNode.new(parse_script(value, :offset => offset))
+      Tree::WhileNode.new(parse_script(value, offset: offset))
     end
 
     def parse_if_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid if directive '@if': expected expression.") unless value
-      Tree::IfNode.new(parse_script(value, :offset => offset))
+      Tree::IfNode.new(parse_script(value, offset: offset))
     end
 
     def parse_debug_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid debug directive '@debug': expected expression.") unless value
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath debug directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       offset = line.offset + line.text.index(value).to_i
-      Tree::DebugNode.new(parse_script(value, :offset => offset))
+      Tree::DebugNode.new(parse_script(value, offset: offset))
     end
 
     def parse_error_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid error directive '@error': expected expression.") unless value
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath error directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       offset = line.offset + line.text.index(value).to_i
-      Tree::ErrorNode.new(parse_script(value, :offset => offset))
+      Tree::ErrorNode.new(parse_script(value, offset: offset))
     end
 
     def parse_extend_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid extend directive '@extend': expected expression.") unless value
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath extend directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       optional = !!value.gsub!(/\s+#{Sass::SCSS::RX::OPTIONAL}$/, '')
       offset = line.offset + line.text.index(value).to_i
       interp_parsed = parse_interp(value, offset)
@@ -854,24 +854,24 @@ WARNING
     def parse_warn_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid warn directive '@warn': expected expression.") unless value
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath warn directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       offset = line.offset + line.text.index(value).to_i
-      Tree::WarnNode.new(parse_script(value, :offset => offset))
+      Tree::WarnNode.new(parse_script(value, offset: offset))
     end
 
     def parse_return_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Invalid @return: expected expression.") unless value
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath return directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       offset = line.offset + line.text.index(value).to_i
-      Tree::ReturnNode.new(parse_script(value, :offset => offset))
+      Tree::ReturnNode.new(parse_script(value, offset: offset))
     end
 
     def parse_charset_directive(parent, line, root, value, offset)
       name = value && value[/\A(["'])(.*)\1\Z/, 2] # "
       raise SyntaxError.new("Invalid charset directive '@charset': expected string.") unless name
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath charset directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
       Tree::CharsetNode.new(name)
     end
 
@@ -931,8 +931,8 @@ WARNING
       raise SyntaxError.new("Invalid variable \"#{var}\".") unless var =~ Script::VALIDATE
 
       var = var[1..-1]
-      parsed_from = parse_script(from_expr, :offset => line.offset + line.text.index(from_expr))
-      parsed_to = parse_script(to_expr, :offset => line.offset + line.text.index(to_expr))
+      parsed_from = parse_script(from_expr, offset: line.offset + line.text.index(from_expr))
+      parsed_to = parse_script(to_expr, offset: line.offset + line.text.index(to_expr))
       Tree::ForNode.new(var, parsed_from, parsed_to, to_name == 'to')
     end
 
@@ -954,7 +954,7 @@ WARNING
         var[1..-1]
       end
 
-      parsed_list = parse_script(list_expr, :offset => line.offset + line.text.index(list_expr))
+      parsed_list = parse_script(list_expr, offset: line.offset + line.text.index(list_expr))
       Tree::EachNode.new(vars, parsed_list)
     end
 
@@ -966,7 +966,7 @@ WARNING
         if value !~ /^if\s+(.+)/
           raise SyntaxError.new("Invalid else directive '@else #{value}': expected 'if <expr>'.")
         end
-        expr = parse_script($1, :offset => line.offset + line.text.index($1))
+        expr = parse_script($1, offset: line.offset + line.text.index($1))
       end
 
       node = Tree::IfNode.new(expr)
@@ -977,7 +977,7 @@ WARNING
 
     def parse_import_directive(parent, line, root, value, offset)
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath import directives.",
-        :line => @line + 1) unless line.children.empty?
+        line: @line + 1) unless line.children.empty?
 
       scanner = Sass::Util::MultibyteStringScanner.new(value)
       values = []
@@ -986,7 +986,7 @@ WARNING
         unless (node = parse_import_arg(scanner, offset + scanner.pos))
           raise SyntaxError.new(
             "Invalid @import: expected file to import, was #{scanner.rest.inspect}",
-            :line => @line)
+            line: @line)
         end
         values << node
         break unless scanner.scan(/,\s*/)
@@ -994,7 +994,7 @@ WARNING
 
       if scanner.scan(/;/)
         raise SyntaxError.new("Invalid @import: expected end of line, was \";\".",
-          :line => @line)
+          line: @line)
       end
 
       values
@@ -1093,7 +1093,7 @@ WARNING
           "Invalid content directive. Trailing characters found: \"#{trailing}\".")
       end
       raise SyntaxError.new("Illegal nesting: Nothing may be nested beneath @content directives.",
-        :line => line.index + 1) unless line.children.empty?
+        line: line.index + 1) unless line.children.empty?
       Tree::ContentNode.new
     end
 
@@ -1152,7 +1152,7 @@ WARNING
     end
 
     def parse_interp(text, offset = 0)
-      self.class.parse_interp(text, @line, offset, :filename => @filename)
+      self.class.parse_interp(text, @line, offset, filename: @filename)
     end
 
     # Parser tracks 1-based line and offset, so our offset should be converted.

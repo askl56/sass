@@ -29,11 +29,11 @@ class LoggerTest < MiniTest::Test
 
   def test_log_level_orders
     logged_levels = {
-      :trace => [ [], [:trace, :debug, :info, :warn, :error]],
-      :debug => [ [:trace],   [:debug, :info, :warn, :error]],
-      :info  => [ [:trace, :debug],   [:info, :warn, :error]],
-      :warn  => [ [:trace, :debug, :info],   [:warn, :error]],
-      :error => [ [:trace, :debug, :info, :warn],   [:error]]
+      trace: [ [], [:trace, :debug, :info, :warn, :error]],
+      debug: [ [:trace],   [:debug, :info, :warn, :error]],
+      info: [ [:trace, :debug],   [:info, :warn, :error]],
+      warn: [ [:trace, :debug, :info],   [:warn, :error]],
+      error: [ [:trace, :debug, :info, :warn],   [:error]]
     }
     logged_levels.each do |level, (should_not_be_logged, should_be_logged)|
       logger = Sass::Logger::Base.new(level)

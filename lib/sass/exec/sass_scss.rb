@@ -8,7 +8,7 @@ module Sass::Exec
       super(args)
       @options[:sourcemap] = :auto
       @options[:for_engine] = {
-        :load_paths => default_sass_path
+        load_paths: default_sass_path
       }
       @default_syntax = default_syntax
     end
@@ -412,9 +412,9 @@ WARNING
         rendered, mapping = engine.render_with_sourcemap(relative_sourcemap_path.to_s)
         write_output(rendered, output)
         write_output(mapping.to_json(
-            :type => @options[:sourcemap],
-            :css_path => @options[:output_filename],
-            :sourcemap_path => @options[:sourcemap_filename]) + "\n",
+            type: @options[:sourcemap],
+            css_path: @options[:output_filename],
+            sourcemap_path: @options[:sourcemap_filename]) + "\n",
           @options[:sourcemap_filename])
       else
         write_output(engine.render, output)

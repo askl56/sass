@@ -12,9 +12,9 @@ class UtilTest < MiniTest::Test
 
   def test_to_hash
     assert_equal({
-        :foo => 1,
-        :bar => 2,
-        :baz => 3
+        foo: 1,
+        bar: 2,
+        baz: 3
       }, to_hash([[:foo, 1], [:bar, 2], [:baz, 3]]))
   end
 
@@ -23,15 +23,15 @@ class UtilTest < MiniTest::Test
         "foo" => 1,
         "bar" => 2,
         "baz" => 3
-      }, map_keys({:foo => 1, :bar => 2, :baz => 3}) {|k| k.to_s})
+      }, map_keys({foo: 1, bar: 2, baz: 3}) {|k| k.to_s})
   end
 
   def test_map_vals
     assert_equal({
-        :foo => "1",
-        :bar => "2",
-        :baz => "3"
-      }, map_vals({:foo => 1, :bar => 2, :baz => 3}) {|k| k.to_s})
+        foo: "1",
+        bar: "2",
+        baz: "3"
+      }, map_vals({foo: 1, bar: 2, baz: 3}) {|k| k.to_s})
   end
 
   def test_map_hash
@@ -39,7 +39,7 @@ class UtilTest < MiniTest::Test
         "foo" => "1",
         "bar" => "2",
         "baz" => "3"
-      }, map_hash({:foo => 1, :bar => 2, :baz => 3}) {|k, v| [k.to_s, v.to_s]})
+      }, map_hash({foo: 1, bar: 2, baz: 3}) {|k, v| [k.to_s, v.to_s]})
   end
 
   def test_map_hash_with_normalized_map

@@ -14,7 +14,7 @@ class Sass::Tree::Visitors::CheckNesting < Sass::Tree::Visitors::Base
     end
     super
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 
@@ -63,8 +63,8 @@ class Sass::Tree::Visitors::CheckNesting < Sass::Tree::Visitors::Base
   def visit_import(node)
     yield
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => node.children.first.filename)
-    e.add_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(filename: node.children.first.filename)
+    e.add_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 
@@ -104,8 +104,8 @@ class Sass::Tree::Visitors::CheckNesting < Sass::Tree::Visitors::Base
     return if parent.is_a?(Sass::Tree::RootNode)
     return "CSS import directives may only be used at the root of a document." if child.css_import?
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => child.imported_file.options[:filename])
-    e.add_backtrace(:filename => child.filename, :line => child.line)
+    e.modify_backtrace(filename: child.imported_file.options[:filename])
+    e.add_backtrace(filename: child.filename, line: child.line)
     raise e
   end
 

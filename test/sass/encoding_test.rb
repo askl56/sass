@@ -155,7 +155,7 @@ SASS
   def test_compressed_output_uses_bom
     return skip "Can't be run on Ruby 1.8." if Sass::Util.ruby1_8?
 
-    assert_equal("\uFEFFfóó{a:b}\n", render(<<SASS, :style => :compressed))
+    assert_equal("\uFEFFfóó{a:b}\n", render(<<SASS, style: :compressed))
 fóó
   a: b
 SASS
@@ -163,13 +163,13 @@ SASS
 
   def test_newline_normalization
     assert_equal("/* foo\nbar\nbaz\nbang\nqux */\n",
-      render("/* foo\nbar\r\nbaz\fbang\rqux */", :syntax => :scss))
+      render("/* foo\nbar\r\nbaz\fbang\rqux */", syntax: :scss))
   end
 
   def test_null_normalization
     return skip "Can't be run on Ruby 1.8." if Sass::Util.ruby1_8?
     
-    assert_equal(<<CSS, render("/* foo\x00bar\x00baz */", :syntax => :scss))
+    assert_equal(<<CSS, render("/* foo\x00bar\x00baz */", syntax: :scss))
 #{"@charset \"UTF-8\";\n" unless Sass::Util.ruby1_8?
 }/* foo�bar�baz */
 CSS
@@ -193,7 +193,7 @@ SASS
   def test_multibyte_and_interpolation
     return skip "Can't be run on Ruby 1.8." if Sass::Util.ruby1_8?
 
-    assert_equal(<<CSS, render(<<SCSS, :syntax => :scss))
+    assert_equal(<<CSS, render(<<SCSS, syntax: :scss))
 #bar {
   background: a 0%; }
 CSS

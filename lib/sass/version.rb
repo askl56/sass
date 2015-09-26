@@ -18,11 +18,11 @@ module Sass
     # For example:
     #
     #     {
-    #       :string => "2.1.0.9616393",
-    #       :rev    => "9616393b8924ef36639c7e82aa88a51a24d16949",
-    #       :number => "2.1.0",
-    #       :date   => DateTime.parse("Apr 30 13:52:01 2009 -0700"),
-    #       :major  => 2, :minor => 1, :teeny => 0
+    #       string: "2.1.0.9616393",
+    #       rev: "9616393b8924ef36639c7e82aa88a51a24d16949",
+    #       number: "2.1.0",
+    #       date: DateTime.parse("Apr 30 13:52:01 2009 -0700"),
+    #       major: 2, minor: 1, teeny: 0
     #     }
     #
     # If a prerelease version of Sass is being used,
@@ -33,12 +33,12 @@ module Sass
     # For example:
     #
     #     {
-    #       :string => "3.0.beta.1",
-    #       :number => "3.0.beta.1",
-    #       :date   => DateTime.parse("Mar 31 00:38:04 2010 -0700"),
-    #       :major => 3, :minor => 0, :teeny => -1,
-    #       :prerelease => "beta",
-    #       :prerelease_number => 1
+    #       string: "3.0.beta.1",
+    #       number: "3.0.beta.1",
+    #       date: DateTime.parse("Mar 31 00:38:04 2010 -0700"),
+    #       major: 3, minor: 0, teeny: -1,
+    #       prerelease: "beta",
+    #       prerelease_number: 1
     #     }
     #
     # @return [{Symbol => String/Fixnum}] The version hash
@@ -51,10 +51,10 @@ module Sass
         map {|n| n =~ /^[0-9]+$/ ? n.to_i : n}
       name = File.read(Sass::Util.scope('VERSION_NAME')).strip
       @@version = {
-        :major => numbers[0],
-        :minor => numbers[1],
-        :teeny => numbers[2],
-        :name => name
+        major: numbers[0],
+        minor: numbers[1],
+        teeny: numbers[2],
+        name: name
       }
 
       if (date = version_date)

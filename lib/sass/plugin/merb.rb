@@ -15,13 +15,13 @@ unless defined?(Sass::MERB_LOADED)
         end
 
         {
-          :always_update      => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != "production",
-          :quiet             => env != "production",
-          :full_exception    => env != "production"
+          always_update: false,
+          template_location: root + '/public/stylesheets/sass',
+          css_location: root + '/public/stylesheets',
+          cache_location: root + '/tmp/sass-cache',
+          always_check: env != "production",
+          quiet: env != "production",
+          full_exception: env != "production"
         }.freeze
       end
     end

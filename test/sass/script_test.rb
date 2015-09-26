@@ -146,22 +146,22 @@ class SassScriptTest < MiniTest::Test
   end
 
   def test_compressed_colors
-    assert_equal "#123456", resolve("#123456", :style => :compressed)
-    assert_equal "rgba(1,2,3,0.5)", resolve("rgba(1, 2, 3, 0.5)", :style => :compressed)
-    assert_equal "#123", resolve("#112233", :style => :compressed)
-    assert_equal "#000", resolve("black", :style => :compressed)
-    assert_equal "red", resolve("#f00", :style => :compressed)
-    assert_equal "blue", resolve("blue", :style => :compressed)
-    assert_equal "navy", resolve("#000080", :style => :compressed)
-    assert_equal "navy #fff", resolve("#000080 white", :style => :compressed)
-    assert_equal "This color is #fff", resolve('"This color is #{ white }"', :style => :compressed)
-    assert_equal "transparent", resolve("rgba(0, 0, 0, 0)", :style => :compressed)
+    assert_equal "#123456", resolve("#123456", style: :compressed)
+    assert_equal "rgba(1,2,3,0.5)", resolve("rgba(1, 2, 3, 0.5)", style: :compressed)
+    assert_equal "#123", resolve("#112233", style: :compressed)
+    assert_equal "#000", resolve("black", style: :compressed)
+    assert_equal "red", resolve("#f00", style: :compressed)
+    assert_equal "blue", resolve("blue", style: :compressed)
+    assert_equal "navy", resolve("#000080", style: :compressed)
+    assert_equal "navy #fff", resolve("#000080 white", style: :compressed)
+    assert_equal "This color is #fff", resolve('"This color is #{ white }"', style: :compressed)
+    assert_equal "transparent", resolve("rgba(0, 0, 0, 0)", style: :compressed)
   end
 
   def test_compressed_comma
-    # assert_equal "foo,bar,baz", resolve("foo, bar, baz", :style => :compressed)
-    # assert_equal "foo,#baf,baz", resolve("foo, #baf, baz", :style => :compressed)
-    assert_equal "foo,#baf,red", resolve("foo, #baf, #f00", :style => :compressed)
+    # assert_equal "foo,bar,baz", resolve("foo, bar, baz", style: :compressed)
+    # assert_equal "foo,#baf,baz", resolve("foo, #baf, baz", style: :compressed)
+    assert_equal "foo,#baf,red", resolve("foo, #baf, #f00", style: :compressed)
   end
 
   def test_implicit_strings
@@ -275,7 +275,7 @@ SASS
   end
 
   def test_inaccessible_functions
-    assert_equal "send(to_s)", resolve("send(to_s)", :line => 2)
+    assert_equal "send(to_s)", resolve("send(to_s)", line: 2)
     assert_equal "public_instance_methods()", resolve("public_instance_methods()")
   end
 
@@ -723,7 +723,7 @@ WARNING
   end
 
   def test_setting_global_variable_globally
-    assert_no_warning {assert_equal(<<CSS, render(<<SCSS, :syntax => :scss))}
+    assert_no_warning {assert_equal(<<CSS, render(<<SCSS, syntax: :scss))}
 .foo {
   a: 1; }
 
@@ -745,7 +745,7 @@ SCSS
   end
 
   def test_setting_global_variable_locally
-    assert_no_warning {assert_equal(<<CSS, render(<<SCSS, :syntax => :scss))}
+    assert_no_warning {assert_equal(<<CSS, render(<<SCSS, syntax: :scss))}
 .bar {
   a: x;
   b: y;
@@ -771,7 +771,7 @@ SCSS
   end
 
   def test_setting_global_variable_locally_with_default
-    assert_equal(<<CSS, render(<<SCSS, :syntax => :scss))
+    assert_equal(<<CSS, render(<<SCSS, syntax: :scss))
 .bar {
   a: 1;
   b: y;
@@ -796,7 +796,7 @@ SCSS
   end
 
   def test_setting_local_variable
-    assert_equal(<<CSS, render(<<SCSS, :syntax => :scss))
+    assert_equal(<<CSS, render(<<SCSS, syntax: :scss))
 .a {
   value: inside; }
 
@@ -817,7 +817,7 @@ SCSS
   end
 
   def test_setting_local_variable_from_inner_scope
-    assert_equal(<<CSS, render(<<SCSS, :syntax => :scss))
+    assert_equal(<<CSS, render(<<SCSS, syntax: :scss))
 .a .b {
   value: inside; }
 .a .c {
@@ -839,7 +839,7 @@ SCSS
   end
 
   def test_if_can_assign_to_global_variables
-    assert_equal <<CSS, render(<<SCSS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SCSS, syntax: :scss)
 .a {
   b: 2; }
 CSS
@@ -850,7 +850,7 @@ SCSS
   end
 
   def test_else_can_assign_to_global_variables
-    assert_equal <<CSS, render(<<SCSS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SCSS, syntax: :scss)
 .a {
   b: 2; }
 CSS
@@ -862,7 +862,7 @@ SCSS
   end
 
   def test_for_can_assign_to_global_variables
-    assert_equal <<CSS, render(<<SCSS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SCSS, syntax: :scss)
 .a {
   b: 2; }
 CSS
@@ -873,7 +873,7 @@ SCSS
   end
 
   def test_each_can_assign_to_global_variables
-    assert_equal <<CSS, render(<<SCSS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SCSS, syntax: :scss)
 .a {
   b: 2; }
 CSS
@@ -884,7 +884,7 @@ SCSS
   end
 
   def test_while_can_assign_to_global_variables
-    assert_equal <<CSS, render(<<SCSS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SCSS, syntax: :scss)
 .a {
   b: 2; }
 CSS
@@ -896,7 +896,7 @@ SCSS
 
   def test_if_doesnt_leak_local_variables
     assert_raise_message(Sass::SyntaxError, 'Undefined variable: "$var".') do
-      render(<<SCSS, :syntax => :scss)
+      render(<<SCSS, syntax: :scss)
 @if true {$var: 1}
 .a {b: $var}
 SCSS
@@ -905,7 +905,7 @@ SCSS
 
   def test_else_doesnt_leak_local_variables
     assert_raise_message(Sass::SyntaxError, 'Undefined variable: "$var".') do
-      render(<<SCSS, :syntax => :scss)
+      render(<<SCSS, syntax: :scss)
 @if false {}
 @else {$var: 1}
 .a {b: $var}
@@ -915,7 +915,7 @@ SCSS
 
   def test_for_doesnt_leak_local_variables
     assert_raise_message(Sass::SyntaxError, 'Undefined variable: "$var".') do
-      render(<<SCSS, :syntax => :scss)
+      render(<<SCSS, syntax: :scss)
 @for $i from 1 to 2 {$var: 1}
 .a {b: $var}
 SCSS
@@ -924,7 +924,7 @@ SCSS
 
   def test_each_doesnt_leak_local_variables
     assert_raise_message(Sass::SyntaxError, 'Undefined variable: "$var".') do
-      render(<<SCSS, :syntax => :scss)
+      render(<<SCSS, syntax: :scss)
 @each $a in 1 {$var: 1}
 .a {b: $var}
 SCSS
@@ -933,7 +933,7 @@ SCSS
 
   def test_while_doesnt_leak_local_variables
     assert_raise_message(Sass::SyntaxError, 'Undefined variable: "$var".') do
-      render(<<SCSS, :syntax => :scss)
+      render(<<SCSS, syntax: :scss)
 $iter: true;
 @while $iter {
   $var: 1;
@@ -954,16 +954,16 @@ SCSS
   end
 
   def test_color_format_isnt_always_preserved_in_compressed_style
-    assert_equal "red", resolve("red", :style => :compressed)
-    assert_equal "red", resolve("#f00", :style => :compressed)
-    assert_equal "red red", resolve("red #f00", :style => :compressed)
-    assert_equal "red", resolve("nth(red #f00, 2)", :style => :compressed)
+    assert_equal "red", resolve("red", style: :compressed)
+    assert_equal "red", resolve("#f00", style: :compressed)
+    assert_equal "red red", resolve("red #f00", style: :compressed)
+    assert_equal "red", resolve("nth(red #f00, 2)", style: :compressed)
   end
 
   def test_color_format_is_sometimes_preserved_in_compressed_style
-    assert_equal "ReD", resolve("ReD", :style => :compressed)
-    assert_equal "blue", resolve("blue", :style => :compressed)
-    assert_equal "#00f", resolve("#00f", :style => :compressed)
+    assert_equal "ReD", resolve("ReD", style: :compressed)
+    assert_equal "blue", resolve("blue", style: :compressed)
+    assert_equal "#00f", resolve("#00f", style: :compressed)
   end
 
   def test_color_format_isnt_preserved_when_modified

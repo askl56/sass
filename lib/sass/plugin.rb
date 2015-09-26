@@ -94,9 +94,9 @@ module Sass
     # @see #update_stylesheets
     def force_update_stylesheets(individual_files = [])
       Compiler.new(options.dup.merge(
-          :never_update => false,
-          :always_update => true,
-          :cache => false)).update_stylesheets(individual_files)
+          never_update: false,
+          always_update: true,
+          cache: false)).update_stylesheets(individual_files)
     end
 
     # All other method invocations are proxied to the \{#compiler}.

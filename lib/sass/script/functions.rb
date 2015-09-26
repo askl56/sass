@@ -386,8 +386,8 @@ module Sass::Script
     # @example
     #   declare :rgba, [:hex, :alpha]
     #   declare :rgba, [:red, :green, :blue, :alpha]
-    #   declare :accepts_anything, [], :var_args => true, :var_kwargs => true
-    #   declare :some_func, [:foo, :bar, :baz], :var_kwargs => true
+    #   declare :accepts_anything, [], var_args: true, var_kwargs: true
+    #   declare :some_func, [:foo, :bar, :baz], var_kwargs: true
     #
     # @param method_name [Symbol] The name of the method
     #   whose signature is being declared.
@@ -489,7 +489,7 @@ module Sass::Script
 
       # The human-readable names for [Sass::Script::Value::Base]. The default is
       # just the downcased name of the type.
-      TYPE_NAMES = {:ArgList => 'variable argument list'}
+      TYPE_NAMES = {ArgList: 'variable argument list'}
 
       # The environment for this function. This environment's
       # {Environment#parent} is the global environment, and its
@@ -696,7 +696,7 @@ module Sass::Script
         else
           assert_type alpha, :Number, :alpha
           check_alpha_unit alpha, 'rgba'
-          color.with(:alpha => alpha.value)
+          color.with(alpha: alpha.value)
         end
       when 4
         red, green, blue, alpha = args
@@ -774,7 +774,7 @@ module Sass::Script
       # because it's not very useful and because some functions aren't supported
       # on older browsers.
       Sass::Script::Value::Color.new(
-        :hue => h, :saturation => s, :lightness => l, :alpha => alpha.value)
+        hue: h, saturation: s, lightness: l, alpha: alpha.value)
     end
     declare :hsla, [:hue, :saturation, :lightness, :alpha]
 
@@ -1063,7 +1063,7 @@ module Sass::Script
     def adjust_hue(color, degrees)
       assert_type color, :Color, :color
       assert_type degrees, :Number, :degrees
-      color.with(:hue => color.hue + degrees.value)
+      color.with(hue: color.hue + degrees.value)
     end
     declare :adjust_hue, [:color, :degrees]
 
@@ -1150,7 +1150,7 @@ module Sass::Script
 
       color.with(with)
     end
-    declare :adjust_color, [:color], :var_kwargs => true
+    declare :adjust_color, [:color], var_kwargs: true
 
     # Fluidly scales one or more properties of a color. Unlike
     # \{#adjust_color adjust-color}, which changes a color's properties by fixed
@@ -1225,7 +1225,7 @@ module Sass::Script
 
       color.with(with)
     end
-    declare :scale_color, [:color], :var_kwargs => true
+    declare :scale_color, [:color], var_kwargs: true
 
     # Changes one or more properties of a color. This can change the red, green,
     # blue, hue, saturation, value, and alpha properties. The properties are
@@ -1295,7 +1295,7 @@ module Sass::Script
 
       color.with(with)
     end
-    declare :change_color, [:color], :var_kwargs => true
+    declare :change_color, [:color], var_kwargs: true
 
     # Mixes two colors together. Specifically, takes the average of each of the
     # RGB components, optionally weighted by the given percentage. The opacity
@@ -1402,9 +1402,9 @@ module Sass::Script
 
       assert_type color, :Color, :color
       color.with(
-        :red => (255 - color.red),
-        :green => (255 - color.green),
-        :blue => (255 - color.blue))
+        red: (255 - color.red),
+        green: (255 - color.green),
+        blue: (255 - color.blue))
     end
     declare :invert, [:color]
 
@@ -1800,7 +1800,7 @@ MESSAGE
       numbers.each {|n| assert_type n, :Number}
       numbers.inject {|min, num| min.lt(num).to_bool ? min : num}
     end
-    declare :min, [], :var_args => :true
+    declare :min, [], var_args: :true
 
     # Finds the maximum of several numbers. This function takes any number of
     # arguments.
@@ -1817,7 +1817,7 @@ MESSAGE
       values.each {|v| assert_type v, :Number}
       values.inject {|max, val| max.gt(val).to_bool ? max : val}
     end
-    declare :max, [], :var_args => :true
+    declare :max, [], var_args: :true
 
     # Return the length of a list.
     #
@@ -1996,7 +1996,7 @@ MESSAGE
       new_list_value = values.first.zip(*values[1..-1])
       list(new_list_value.map {|list| list(list, :space)}, :comma)
     end
-    declare :zip, [], :var_args => true
+    declare :zip, [], var_args: true
 
     # Returns the position of a value within a list. If the value isn't found,
     # returns `null` instead.
@@ -2102,7 +2102,7 @@ MESSAGE
       hash.delete_if {|key, _| keys.include?(key)}
       map(hash)
     end
-    declare :map_remove, [:map, :key], :var_args => true
+    declare :map_remove, [:map, :key], var_args: true
 
     # Returns a list of all keys in a map.
     #
@@ -2234,7 +2234,7 @@ MESSAGE
       funcall.options = options
       perform(funcall)
     end
-    declare :call, [:name], :var_args => true, :var_kwargs => true
+    declare :call, [:name], var_args: true, var_kwargs: true
 
     # This function only exists as a workaround for IE7's [`content:
     # counter` bug](http://jes.st/2013/ie7s-css-breaking-content-counter-bug/).
@@ -2248,7 +2248,7 @@ MESSAGE
     def counter(*args)
       identifier("counter(#{args.map {|a| a.to_s(options)}.join(',')})")
     end
-    declare :counter, [], :var_args => true
+    declare :counter, [], var_args: true
 
     # This function only exists as a workaround for IE7's [`content:
     # counter` bug](http://jes.st/2013/ie7s-css-breaking-content-counter-bug/).
@@ -2262,7 +2262,7 @@ MESSAGE
     def counters(*args)
       identifier("counters(#{args.map {|a| a.to_s(options)}.join(',')})")
     end
-    declare :counters, [], :var_args => true
+    declare :counters, [], var_args: true
 
     # Check whether a variable with the given name exists in the current
     # scope or in the global scope.
@@ -2428,7 +2428,7 @@ MESSAGE
       parsed += selectors[1..-1].map {|sel| parse_selector(sel, :selectors, !!:parse_parent_ref)}
       parsed.inject {|result, child| child.resolve_parent_refs(result)}.to_sass_script
     end
-    declare :selector_nest, [], :var_args => true
+    declare :selector_nest, [], var_args: true
 
     # Return a new selector with all selectors in `$selectors` appended one
     # another as though they had been nested in the stylesheet as `$selector1 {
@@ -2477,7 +2477,7 @@ MESSAGE
         child.resolve_parent_refs(parent)
       end.to_sass_script
     end
-    declare :selector_append, [], :var_args => true
+    declare :selector_append, [], var_args: true
 
     # Returns a new version of `$selector` with `$extendee` extended
     # with `$extender`. This works just like the result of

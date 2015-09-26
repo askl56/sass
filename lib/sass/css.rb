@@ -46,7 +46,7 @@ module Sass
       check_encoding!
       build_tree.send("to_#{fmt}", @options).strip + "\n"
     rescue Sass::SyntaxError => err
-      err.modify_backtrace(:filename => @options[:filename] || '(css)')
+      err.modify_backtrace(filename: @options[:filename] || '(css)')
       raise err
     end
 

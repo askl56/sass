@@ -43,7 +43,7 @@ SCSS
   end
 
   def test_indented_syntax
-    assert_equal <<CSS, render(<<SASS, :syntax => :sass)
+    assert_equal <<CSS, render(<<SASS, syntax: :sass)
 .foo, .bar {
   a: b; }
 CSS
@@ -53,7 +53,7 @@ CSS
   @extend .foo
 SASS
 
-    assert_equal <<CSS, render(<<SASS, :syntax => :sass)
+    assert_equal <<CSS, render(<<SASS, syntax: :sass)
 .foo, .bar {
   a: b; }
 CSS
@@ -1700,7 +1700,7 @@ SCSS
   end
 
   def render(sass, options = {})
-    options = {:syntax => :scss}.merge(options)
+    options = {syntax: :scss}.merge(options)
     munge_filename options
     Sass::Engine.new(sass, options).render
   end

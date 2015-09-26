@@ -9,11 +9,11 @@ module Sass
       # @return [{Symbol => Object}]
       def default_options
         @default_options ||= {
-          :css_location       => './public/stylesheets',
-          :always_update      => false,
-          :always_check       => true,
-          :full_exception     => true,
-          :cache_location     => ".sass-cache"
+          css_location: './public/stylesheets',
+          always_update: false,
+          always_check: true,
+          full_exception: true,
+          cache_location: ".sass-cache"
         }.freeze
       end
 

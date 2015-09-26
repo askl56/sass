@@ -9,7 +9,7 @@ module Sass::Exec
       super
       require 'sass'
       @options[:for_tree] = {}
-      @options[:for_engine] = {:cache => false, :read_cache => true}
+      @options[:for_engine] = {cache: false, read_cache: true}
     end
 
     # Tells optparse how to parse the arguments.

@@ -23,7 +23,7 @@ class Sass::Tree::Visitors::ToCss < Sass::Tree::Visitors::Base
   def visit(node)
     super
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 
@@ -397,9 +397,9 @@ class Sass::Tree::Visitors::ToCss < Sass::Tree::Visitors::Base
       rule << prop
       node << rule
     end
-    node.options = options.merge(:debug_info => false,
-                                 :line_comments => false,
-                                 :style => :compressed)
+    node.options = options.merge(debug_info: false,
+                                 line_comments: false,
+                                 style: :compressed)
     node
   end
 end

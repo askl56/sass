@@ -186,7 +186,7 @@ MSG
   end
 
   def test_basic_render
-    renders_correctly "basic", { :style => :compact }
+    renders_correctly "basic", { style: :compact }
   end
 
   def test_empty_render
@@ -199,23 +199,23 @@ MSG
   end
 
   def test_alternate_styles
-    renders_correctly "expanded", { :style => :expanded }
-    renders_correctly "compact", { :style => :compact }
-    renders_correctly "nested", { :style => :nested }
-    renders_correctly "compressed", { :style => :compressed }
+    renders_correctly "expanded", { style: :expanded }
+    renders_correctly "compact", { style: :compact }
+    renders_correctly "nested", { style: :nested }
+    renders_correctly "compressed", { style: :compressed }
   end
 
   def test_compile
-    assert_equal "div { hello: world; }\n", Sass.compile("$who: world\ndiv\n  hello: $who", :syntax => :sass, :style => :compact)
-    assert_equal "div { hello: world; }\n", Sass.compile("$who: world; div { hello: $who }", :style => :compact)
+    assert_equal "div { hello: world; }\n", Sass.compile("$who: world\ndiv\n  hello: $who", syntax: :sass, style: :compact)
+    assert_equal "div { hello: world; }\n", Sass.compile("$who: world; div { hello: $who }", style: :compact)
   end
 
   def test_compile_file
     FileUtils.mkdir_p(absolutize("tmp"))
     open(absolutize("tmp/test_compile_file.sass"), "w") {|f| f.write("$who: world\ndiv\n  hello: $who")}
     open(absolutize("tmp/test_compile_file.scss"), "w") {|f| f.write("$who: world; div { hello: $who }")}
-    assert_equal "div { hello: world; }\n", Sass.compile_file(absolutize("tmp/test_compile_file.sass"), :style => :compact)
-    assert_equal "div { hello: world; }\n", Sass.compile_file(absolutize("tmp/test_compile_file.scss"), :style => :compact)
+    assert_equal "div { hello: world; }\n", Sass.compile_file(absolutize("tmp/test_compile_file.sass"), style: :compact)
+    assert_equal "div { hello: world; }\n", Sass.compile_file(absolutize("tmp/test_compile_file.scss"), style: :compact)
   ensure
     FileUtils.rm_rf(absolutize("tmp"))
   end
@@ -224,8 +224,8 @@ MSG
     FileUtils.mkdir_p(absolutize("tmp"))
     open(absolutize("tmp/test_compile_file.sass"), "w") {|f| f.write("$who: world\ndiv\n  hello: $who")}
     open(absolutize("tmp/test_compile_file.scss"), "w") {|f| f.write("$who: world; div { hello: $who }")}
-    Sass.compile_file(absolutize("tmp/test_compile_file.sass"), absolutize("tmp/test_compile_file_sass.css"), :style => :compact)
-    Sass.compile_file(absolutize("tmp/test_compile_file.scss"), absolutize("tmp/test_compile_file_scss.css"), :style => :compact)
+    Sass.compile_file(absolutize("tmp/test_compile_file.sass"), absolutize("tmp/test_compile_file_sass.css"), style: :compact)
+    Sass.compile_file(absolutize("tmp/test_compile_file.scss"), absolutize("tmp/test_compile_file_scss.css"), style: :compact)
     assert_equal "div { hello: world; }\n", File.read(absolutize("tmp/test_compile_file_sass.css"))
     assert_equal "div { hello: world; }\n", File.read(absolutize("tmp/test_compile_file_scss.css"))
   ensure
@@ -247,7 +247,7 @@ Candidates:
   same_name_different_ext.scss
 Please delete or rename all but one of these files.
 ERROR
-      options = {:load_paths => [File.dirname(__FILE__) + '/templates/']}
+      options = {load_paths: [File.dirname(__FILE__) + '/templates/']}
       munge_filename options
       Sass::Engine.new("@import 'same_name_different_ext'", options).render
     end
@@ -261,7 +261,7 @@ Candidates:
   same_name_different_partiality.scss
 Please delete or rename all but one of these files.
 ERROR
-      options = {:load_paths => [File.dirname(__FILE__) + '/templates/']}
+      options = {load_paths: [File.dirname(__FILE__) + '/templates/']}
       munge_filename options
       Sass::Engine.new("@import 'same_name_different_partiality'", options).render
     end
@@ -271,7 +271,7 @@ ERROR
     define_method("test_exception (#{key.inspect})") do
       line = 10
       begin
-        silence_warnings {Sass::Engine.new(key, :filename => FAKE_FILE_NAME, :line => line).render}
+        silence_warnings {Sass::Engine.new(key, filename: FAKE_FILE_NAME, line: line).render}
       rescue Sass::SyntaxError => err
         value = [value] unless value.is_a?(Array)
 
@@ -311,7 +311,7 @@ rule
   :broken
 SASS
     begin
-      Sass::Engine.new(to_render, :filename => FAKE_FILE_NAME, :line => (__LINE__-7)).render
+      Sass::Engine.new(to_render, filename: FAKE_FILE_NAME, line: (__LINE__-7)).render
     rescue Sass::SyntaxError => err
       assert_equal(FAKE_FILE_NAME, err.sass_filename)
       assert_equal((__LINE__-6), err.sass_line)
@@ -323,13 +323,13 @@ SASS
   def test_imported_exception
     [1, 2, 3, 4].each do |i|
       begin
-        Sass::Engine.new("@import bork#{i}", :load_paths => [File.dirname(__FILE__) + '/templates/']).render
+        Sass::Engine.new("@import bork#{i}", load_paths: [File.dirname(__FILE__) + '/templates/']).render
       rescue Sass::SyntaxError => err
         assert_equal(2, err.sass_line)
         assert_match(/(\/|^)bork#{i}\.sass$/, err.sass_filename)
 
         assert_hash_has(err.sass_backtrace.first,
-          :filename => err.sass_filename, :line => err.sass_line)
+          filename: err.sass_filename, line: err.sass_line)
 
         assert_nil(err.sass_backtrace[1][:filename])
         assert_equal(1, err.sass_backtrace[1][:line])
@@ -345,13 +345,13 @@ SASS
   def test_double_imported_exception
     [1, 2, 3, 4].each do |i|
       begin
-        Sass::Engine.new("@import nested_bork#{i}", :load_paths => [File.dirname(__FILE__) + '/templates/']).render
+        Sass::Engine.new("@import nested_bork#{i}", load_paths: [File.dirname(__FILE__) + '/templates/']).render
       rescue Sass::SyntaxError => err
         assert_equal(2, err.sass_line)
         assert_match(/(\/|^)bork#{i}\.sass$/, err.sass_filename)
 
         assert_hash_has(err.sass_backtrace.first,
-          :filename => err.sass_filename, :line => err.sass_line)
+          filename: err.sass_filename, line: err.sass_line)
 
         assert_match(/(\/|^)nested_bork#{i}\.sass$/, err.sass_backtrace[1][:filename])
         assert_equal(2, err.sass_backtrace[1][:line])
@@ -369,7 +369,7 @@ SASS
   end
 
   def test_selector_tracing
-    actual_css = render(<<-SCSS, :syntax => :scss, :trace_selectors => true)
+    actual_css = render(<<-SCSS, syntax: :scss, trace_selectors: true)
       @mixin mixed {
         .mixed { color: red; }
       }
@@ -402,12 +402,12 @@ SASS
     assert_equal(filename_for_test, err.sass_filename)
     assert_equal("error-mixin", err.sass_mixin)
 
-    assert_hash_has(err.sass_backtrace.first, :line => err.sass_line,
-      :filename => err.sass_filename, :mixin => err.sass_mixin)
-    assert_hash_has(err.sass_backtrace[1], :line => 5,
-      :filename => filename_for_test, :mixin => "outer-mixin")
-    assert_hash_has(err.sass_backtrace[2], :line => 8,
-      :filename => filename_for_test, :mixin => nil)
+    assert_hash_has(err.sass_backtrace.first, line: err.sass_line,
+      filename: err.sass_filename, mixin: err.sass_mixin)
+    assert_hash_has(err.sass_backtrace[1], line: 5,
+      filename: filename_for_test, mixin: "outer-mixin")
+    assert_hash_has(err.sass_backtrace[2], line: 8,
+      filename: filename_for_test, mixin: nil)
 
     assert_equal("#{filename_for_test}:2:in `error-mixin'", err.backtrace.first)
     assert_equal("#{filename_for_test}:5:in `outer-mixin'", err.backtrace[1])
@@ -427,12 +427,12 @@ SASS
 SASS
     assert(false, "Exception not raised")
   rescue Sass::SyntaxError => err
-    assert_hash_has(err.sass_backtrace.first, :line => 5,
-      :filename => filename_for_test, :mixin => "one-arg-mixin")
-    assert_hash_has(err.sass_backtrace[1], :line => 5,
-      :filename => filename_for_test, :mixin => "outer-mixin")
-    assert_hash_has(err.sass_backtrace[2], :line => 8,
-      :filename => filename_for_test, :mixin => nil)
+    assert_hash_has(err.sass_backtrace.first, line: 5,
+      filename: filename_for_test, mixin: "one-arg-mixin")
+    assert_hash_has(err.sass_backtrace[1], line: 5,
+      filename: filename_for_test, mixin: "outer-mixin")
+    assert_hash_has(err.sass_backtrace[2], line: 8,
+      filename: filename_for_test, mixin: nil)
   end
 
   def test_mixin_exception_cssize
@@ -448,31 +448,31 @@ SASS
 SASS
     assert(false, "Exception not raised")
   rescue Sass::SyntaxError => err
-    assert_hash_has(err.sass_backtrace.first, :line => 2,
-      :filename => filename_for_test, :mixin => "parent-ref-mixin")
-    assert_hash_has(err.sass_backtrace[1], :line => 6,
-      :filename => filename_for_test, :mixin => "outer-mixin")
-    assert_hash_has(err.sass_backtrace[2], :line => 8,
-      :filename => filename_for_test, :mixin => nil)
+    assert_hash_has(err.sass_backtrace.first, line: 2,
+      filename: filename_for_test, mixin: "parent-ref-mixin")
+    assert_hash_has(err.sass_backtrace[1], line: 6,
+      filename: filename_for_test, mixin: "outer-mixin")
+    assert_hash_has(err.sass_backtrace[2], line: 8,
+      filename: filename_for_test, mixin: nil)
   end
 
   def test_mixin_and_import_exception
-    Sass::Engine.new("@import nested_mixin_bork", :load_paths => [File.dirname(__FILE__) + '/templates/']).render
+    Sass::Engine.new("@import nested_mixin_bork", load_paths: [File.dirname(__FILE__) + '/templates/']).render
     assert(false, "Exception not raised")
   rescue Sass::SyntaxError => err
     assert_match(/(\/|^)nested_mixin_bork\.sass$/, err.sass_backtrace.first[:filename])
-    assert_hash_has(err.sass_backtrace.first, :mixin => "error-mixin", :line => 4)
+    assert_hash_has(err.sass_backtrace.first, mixin: "error-mixin", line: 4)
 
     assert_match(/(\/|^)mixin_bork\.sass$/, err.sass_backtrace[1][:filename])
-    assert_hash_has(err.sass_backtrace[1], :mixin => "outer-mixin", :line => 2)
+    assert_hash_has(err.sass_backtrace[1], mixin: "outer-mixin", line: 2)
 
     assert_match(/(\/|^)mixin_bork\.sass$/, err.sass_backtrace[2][:filename])
-    assert_hash_has(err.sass_backtrace[2], :mixin => nil, :line => 5)
+    assert_hash_has(err.sass_backtrace[2], mixin: nil, line: 5)
 
     assert_match(/(\/|^)nested_mixin_bork\.sass$/, err.sass_backtrace[3][:filename])
-    assert_hash_has(err.sass_backtrace[3], :mixin => nil, :line => 6)
+    assert_hash_has(err.sass_backtrace[3], mixin: nil, line: 6)
 
-    assert_hash_has(err.sass_backtrace[4], :filename => nil, :mixin => nil, :line => 1)
+    assert_hash_has(err.sass_backtrace[4], filename: nil, mixin: nil, line: 1)
   end
 
   def test_recursive_mixin
@@ -501,8 +501,8 @@ SASS
     importer.add_import("foo", "@import 'bar'")
     importer.add_import("bar", "@import 'foo'")
 
-    engine = Sass::Engine.new('@import "foo"', :filename => filename_for_test,
-      :load_paths => [importer], :importer => importer)
+    engine = Sass::Engine.new('@import "foo"', filename: filename_for_test,
+      load_paths: [importer], importer: importer)
 
     assert_raise_message(Sass::SyntaxError, <<ERR.rstrip) {engine.render}
 An @import loop has been found:
@@ -518,8 +518,8 @@ ERR
     importer.add_import("bar", "@import 'baz'")
     importer.add_import("baz", "@import 'foo'")
 
-    engine = Sass::Engine.new('@import "foo"', :filename => filename_for_test,
-      :load_paths => [importer], :importer => importer)
+    engine = Sass::Engine.new('@import "foo"', filename: filename_for_test,
+      load_paths: [importer], importer: importer)
 
     assert_raise_message(Sass::SyntaxError, <<ERR.rstrip) {engine.render}
 An @import loop has been found:
@@ -531,7 +531,7 @@ ERR
   end
 
   def test_exception_css_with_offset
-    opts = {:full_exception => true, :line => 362}
+    opts = {full_exception: true, line: 362}
     render(("a\n  b: c\n" * 10) + "d\n  e:\n" + ("f\n  g: h\n" * 10), opts)
   rescue Sass::SyntaxError => e
     assert_equal(<<CSS, Sass::SyntaxError.exception_to_css(e, opts[:line]).split("\n")[0..15].join("\n"))
@@ -556,7 +556,7 @@ CSS
   end
 
   def test_exception_css_with_mixins
-    render(<<SASS, :full_exception => true)
+    render(<<SASS, full_exception: true)
 =error-mixin($a)
   color: $a * 1em * 1px
 
@@ -587,7 +587,7 @@ CSS
   end
 
   def test_cssize_exception_css
-    render(<<SASS, :full_exception => true)
+    render(<<SASS, full_exception: true)
 .filler
   stuff: "stuff!"
 
@@ -655,7 +655,7 @@ SASS
   def test_sass_import
     sassc_file = sassc_path("importee")
     assert !File.exist?(sassc_file)
-    renders_correctly "import", { :style => :compact, :load_paths => [File.dirname(__FILE__) + "/templates"] }
+    renders_correctly "import", { style: :compact, load_paths: [File.dirname(__FILE__) + "/templates"] }
     assert File.exist?(sassc_file)
   end
 
@@ -663,8 +663,8 @@ SASS
     sassc_file = sassc_path("importee")
     assert !File.exist?(sassc_file)
     renders_correctly("import",
-      :style => :compact,
-      :load_paths => [Pathname.new(File.dirname(__FILE__) + "/templates")])
+      style: :compact,
+      load_paths: [Pathname.new(File.dirname(__FILE__) + "/templates")])
     assert File.exist?(sassc_file)
   end
 
@@ -673,7 +673,7 @@ SASS
     importer.add_import("imported", "div{color:red}")
     Sass.load_paths << importer
 
-    assert_equal "div {\n  color: red; }\n", Sass::Engine.new('@import "imported"', :importer => importer).render
+    assert_equal "div {\n  color: red; }\n", Sass::Engine.new('@import "imported"', importer: importer).render
   ensure
     Sass.load_paths.clear
   end
@@ -697,14 +697,14 @@ ERR
   def test_no_cache
     assert !File.exist?(sassc_path("importee"))
     renders_correctly("import", {
-        :style => :compact, :cache => false,
-        :load_paths => [File.dirname(__FILE__) + "/templates"],
+        style: :compact, cache: false,
+        load_paths: [File.dirname(__FILE__) + "/templates"],
       })
     assert !File.exist?(sassc_path("importee"))
   end
 
   def test_import_in_rule
-    assert_equal(<<CSS, render(<<SASS, :load_paths => [File.dirname(__FILE__) + '/templates/']))
+    assert_equal(<<CSS, render(<<SASS, load_paths: [File.dirname(__FILE__) + '/templates/']))
 .foo #foo {
   background-color: #baf; }
 
@@ -755,10 +755,10 @@ SASS
     assert_equal("#foo,\n#bar {\n  foo: bar; }\n  #foo #baz,\n  #bar #baz {\n    foo: bar; }\n",
                  render("#foo,\n#bar\n  :foo bar\n  #baz\n    :foo bar"))
     assert_equal("#foo #bar, #baz #boom { foo: bar; }\n",
-                 render("#foo #bar,\n#baz #boom\n  :foo bar", :style => :compact))
+                 render("#foo #bar,\n#baz #boom\n  :foo bar", style: :compact))
                  
     assert_equal("#foo #bar,#baz #boom{foo:bar}\n",
-                 render("#foo #bar,\n#baz #boom\n  :foo bar", :style => :compressed))
+                 render("#foo #bar,\n#baz #boom\n  :foo bar", style: :compressed))
 
     assert_equal("#foo #bar,\n#baz #boom {\n  foo: bar; }\n",
                  render("#foo #bar,,\n,#baz #boom,\n  :foo bar"))
@@ -773,23 +773,23 @@ SASS
 
   def test_colon_only
     begin
-      render("a\n  b: c", :property_syntax => :old)
+      render("a\n  b: c", property_syntax: :old)
     rescue Sass::SyntaxError => e
-      assert_equal("Illegal property syntax: can't use new syntax when :property_syntax => :old is set.",
+      assert_equal("Illegal property syntax: can't use new syntax when property_syntax: :old is set.",
                    e.message)
       assert_equal(2, e.sass_line)
     else
-      assert(false, "SyntaxError not raised for :property_syntax => :old")
+      assert(false, "SyntaxError not raised for property_syntax: :old")
     end
 
     begin
-      render("a\n  :b c", :property_syntax => :new)
+      render("a\n  :b c", property_syntax: :new)
       assert_equal(2, e.sass_line)
     rescue Sass::SyntaxError => e
-      assert_equal("Illegal property syntax: can't use old syntax when :property_syntax => :new is set.",
+      assert_equal("Illegal property syntax: can't use old syntax when property_syntax: :new is set.",
                    e.message)
     else
-      assert(false, "SyntaxError not raised for :property_syntax => :new")
+      assert(false, "SyntaxError not raised for property_syntax: :new")
     end
   end
 
@@ -807,45 +807,45 @@ SASS
     assert_equal("@a b;\n", render("@a b"))
 
     assert_equal("@a {\n  b: c; }\n", render("@a\n  :b c"))
-    assert_equal("@a { b: c; }\n", render("@a\n  :b c", :style => :compact))
-    assert_equal("@a {\n  b: c;\n}\n", render("@a\n  :b c", :style => :expanded))
-    assert_equal("@a{b:c}\n", render("@a\n  :b c", :style => :compressed))
+    assert_equal("@a { b: c; }\n", render("@a\n  :b c", style: :compact))
+    assert_equal("@a {\n  b: c;\n}\n", render("@a\n  :b c", style: :expanded))
+    assert_equal("@a{b:c}\n", render("@a\n  :b c", style: :compressed))
 
     assert_equal("@a {\n  b: c;\n  d: e; }\n",
                  render("@a\n  :b c\n  :d e"))
     assert_equal("@a { b: c; d: e; }\n",
-                 render("@a\n  :b c\n  :d e", :style => :compact))
+                 render("@a\n  :b c\n  :d e", style: :compact))
     assert_equal("@a {\n  b: c;\n  d: e;\n}\n",
-                 render("@a\n  :b c\n  :d e", :style => :expanded))
+                 render("@a\n  :b c\n  :d e", style: :expanded))
     assert_equal("@a{b:c;d:e}\n",
-                 render("@a\n  :b c\n  :d e", :style => :compressed))
+                 render("@a\n  :b c\n  :d e", style: :compressed))
 
     assert_equal("@a {\n  #b {\n    c: d; } }\n",
                  render("@a\n  #b\n    :c d"))
     assert_equal("@a { #b { c: d; } }\n",
-                 render("@a\n  #b\n    :c d", :style => :compact))
+                 render("@a\n  #b\n    :c d", style: :compact))
     assert_equal("@a {\n  #b {\n    c: d;\n  }\n}\n",
-                 render("@a\n  #b\n    :c d", :style => :expanded))
+                 render("@a\n  #b\n    :c d", style: :expanded))
     assert_equal("@a{#b{c:d}}\n",
-                 render("@a\n  #b\n    :c d", :style => :compressed))
+                 render("@a\n  #b\n    :c d", style: :compressed))
 
     assert_equal("@a {\n  #b {\n    a: b; }\n    #b #c {\n      d: e; } }\n",
                  render("@a\n  #b\n    :a b\n    #c\n      :d e"))
     assert_equal("@a { #b { a: b; }\n  #b #c { d: e; } }\n",
-                 render("@a\n  #b\n    :a b\n    #c\n      :d e", :style => :compact))
+                 render("@a\n  #b\n    :a b\n    #c\n      :d e", style: :compact))
     assert_equal("@a {\n  #b {\n    a: b;\n  }\n  #b #c {\n    d: e;\n  }\n}\n",
-                 render("@a\n  #b\n    :a b\n    #c\n      :d e", :style => :expanded))
+                 render("@a\n  #b\n    :a b\n    #c\n      :d e", style: :expanded))
     assert_equal("@a{#b{a:b}#b #c{d:e}}\n",
-                 render("@a\n  #b\n    :a b\n    #c\n      :d e", :style => :compressed))
+                 render("@a\n  #b\n    :a b\n    #c\n      :d e", style: :compressed))
                  
     assert_equal("@a {\n  #foo,\n  #bar {\n    b: c; } }\n",
                  render("@a\n  #foo, \n  #bar\n    :b c"))
     assert_equal("@a { #foo, #bar { b: c; } }\n",
-                 render("@a\n  #foo, \n  #bar\n    :b c", :style => :compact))
+                 render("@a\n  #foo, \n  #bar\n    :b c", style: :compact))
     assert_equal("@a {\n  #foo,\n  #bar {\n    b: c;\n  }\n}\n",
-                 render("@a\n  #foo, \n  #bar\n    :b c", :style => :expanded))
+                 render("@a\n  #foo, \n  #bar\n    :b c", style: :expanded))
     assert_equal("@a{#foo,#bar{b:c}}\n",
-                 render("@a\n  #foo, \n  #bar\n    :b c", :style => :compressed))
+                 render("@a\n  #foo, \n  #bar\n    :b c", style: :compressed))
 
     to_render = <<END
 @a
@@ -859,9 +859,9 @@ END
   #d { e: f; }
   g: h; }
 END
-    assert_equal(rendered, render(to_render, :style => :compact))
+    assert_equal(rendered, render(to_render, style: :compact))
     
-    assert_equal("@a{b:c;#d{e:f}g:h}\n", render(to_render, :style => :compressed))
+    assert_equal("@a{b:c;#d{e:f}g:h}\n", render(to_render, style: :compressed))
   end
 
   def test_property_hacks
@@ -899,7 +899,7 @@ SASS
   end
 
   def test_line_annotations
-    assert_equal(<<CSS, render(<<SASS, :line_comments => true, :style => :compact))
+    assert_equal(<<CSS, render(<<SASS, line_comments: true, style: :compact))
 /* line 2, test_line_annotations_inline.sass */
 foo bar { foo: bar; }
 /* line 5, test_line_annotations_inline.sass */
@@ -943,13 +943,13 @@ SASS
   end
 
   def test_line_annotations_with_filename
-    renders_correctly "line_numbers", :line_comments => true, :load_paths => [File.dirname(__FILE__) + "/templates"]
+    renders_correctly "line_numbers", line_comments: true, load_paths: [File.dirname(__FILE__) + "/templates"]
   end
 
   def test_debug_info
     esc_file_name = Sass::SCSS::RX.escape_ident(Sass::Util.scope("test_debug_info_inline.sass"))
 
-    assert_equal(<<CSS, render(<<SASS, :debug_info => true, :style => :compact))
+    assert_equal(<<CSS, render(<<SASS, debug_info: true, style: :compact))
 @media -sass-debug-info{filename{font-family:file\\:\\/\\/#{esc_file_name}}line{font-family:\\000032}}
 foo bar { foo: bar; }
 @media -sass-debug-info{filename{font-family:file\\:\\/\\/#{esc_file_name}}line{font-family:\\000035}}
@@ -993,7 +993,7 @@ SASS
   end
 
   def test_debug_info_without_filename
-    assert_equal(<<CSS, Sass::Engine.new(<<SASS, :debug_info => true).render)
+    assert_equal(<<CSS, Sass::Engine.new(<<SASS, debug_info: true).render)
 @media -sass-debug-info{filename{}line{font-family:\\000031}}
 foo {
   a: b; }
@@ -1004,7 +1004,7 @@ SASS
   end
 
   def test_debug_info_with_compressed
-    assert_equal(<<CSS, render(<<SASS, :debug_info => true, :style => :compressed))
+    assert_equal(<<CSS, render(<<SASS, debug_info: true, style: :compressed))
 foo{a:b}
 CSS
 foo
@@ -1015,7 +1015,7 @@ SASS
   def test_debug_info_with_line_annotations
     esc_file_name = Sass::SCSS::RX.escape_ident(Sass::Util.scope("test_debug_info_with_line_annotations_inline.sass"))
 
-    assert_equal(<<CSS, render(<<SASS, :debug_info => true, :line_comments => true))
+    assert_equal(<<CSS, render(<<SASS, debug_info: true, line_comments: true))
 @media -sass-debug-info{filename{font-family:file\\:\\/\\/#{esc_file_name}}line{font-family:\\000031}}
 foo {
   a: b; }
@@ -1026,7 +1026,7 @@ SASS
   end
 
   def test_debug_info_in_keyframes
-    assert_equal(<<CSS, render(<<SASS, :debug_info => true))
+    assert_equal(<<CSS, render(<<SASS, debug_info: true))
 @-webkit-keyframes warm {
   from {
     color: black; }
@@ -1086,7 +1086,7 @@ SASS
   end
   
   def test_mixins
-    renders_correctly "mixins", { :style => :expanded }
+    renders_correctly "mixins", { style: :expanded }
   end
 
   def test_directive_style_mixins
@@ -1778,7 +1778,7 @@ SASS
   end
 
   def test_loud_comment_in_compressed_mode
-    assert_equal <<CSS, render(<<SASS, :style => :compressed)
+    assert_equal <<CSS, render(<<SASS, style: :compressed)
 foo{color:blue;/*! foo
  * bar
  */}
@@ -1871,7 +1871,7 @@ SASS
   end
 
   def test_root_level_pseudo_class_with_new_properties
-    assert_equal(<<CSS, render(<<SASS, :property_syntax => :new))
+    assert_equal(<<CSS, render(<<SASS, property_syntax: :new))
 :focus {
   outline: 0; }
 CSS
@@ -1881,7 +1881,7 @@ SASS
   end
 
   def test_pseudo_class_with_new_properties
-    assert_equal(<<CSS, render(<<SASS, :property_syntax => :new))
+    assert_equal(<<CSS, render(<<SASS, property_syntax: :new))
 p :focus {
   outline: 0; }
 CSS
@@ -1892,7 +1892,7 @@ SASS
   end
 
   def test_nil_option
-    assert_equal(<<CSS, render(<<SASS, :format => nil))
+    assert_equal(<<CSS, render(<<SASS, format: nil))
 foo {
   a: b; }
 CSS
@@ -2050,7 +2050,7 @@ SASS
 
   def test_warn_directive_when_quiet
     assert_warning "" do
-      assert_equal <<CSS, render(<<SASS, :quiet => true)
+      assert_equal <<CSS, render(<<SASS, quiet: true)
 CSS
 @warn "this is a warning"
 SASS
@@ -2072,7 +2072,7 @@ WARNING: In an imported mixin
          from line 3 of #{prefix}/templates/warn.sass
 WARN
     assert_warning expected_warning do
-      renders_correctly "warn", :style => :compact, :load_paths => ["#{prefix}/templates"]
+      renders_correctly "warn", style: :compact, load_paths: ["#{prefix}/templates"]
     end
   end
 
@@ -2105,7 +2105,7 @@ CSS
   i: j
 SASS
 
-    assert_equal <<CSS, render(<<SASS, :style => :compact)
+    assert_equal <<CSS, render(<<SASS, style: :compact)
 .foo { a: b; }
 @media bar { .foo { c: d; } }
 .foo .baz { e: f; }
@@ -2126,7 +2126,7 @@ CSS
   i: j
 SASS
 
-    assert_equal <<CSS, render(<<SASS, :style => :expanded)
+    assert_equal <<CSS, render(<<SASS, style: :expanded)
 .foo {
   a: b;
 }
@@ -2517,7 +2517,7 @@ SASS
   end
 
   def test_line_numbers_with_dos_line_endings
-    assert_equal <<CSS, render(<<SASS, :line_comments => true)
+    assert_equal <<CSS, render(<<SASS, line_comments: true)
 /* line 5, test_line_numbers_with_dos_line_endings_inline.sass */
 .foo {
   a: b; }
@@ -2614,7 +2614,7 @@ RESULT
     :style solid
 SOURCE
 
-    assert_equal(<<RESULT, render(<<SOURCE, :style => :compressed))
+    assert_equal(<<RESULT, render(<<SOURCE, style: :compressed))
 .box{border-style:solid}
 RESULT
 .box
@@ -2625,7 +2625,7 @@ SOURCE
   end
 
   def test_compressed_comment_beneath_directive
-    assert_equal(<<RESULT, render(<<SOURCE, :style => :compressed))
+    assert_equal(<<RESULT, render(<<SOURCE, style: :compressed))
 @foo{a:b}
 RESULT
 @foo
@@ -2864,7 +2864,7 @@ SASS
   end
 
   def test_selector_compression
-    assert_equal <<CSS, render(<<SASS, :style => :compressed)
+    assert_equal <<CSS, render(<<SASS, style: :compressed)
 a>b,c+d,:-moz-any(e,f,g){h:i}
 CSS
 a > b, c + d, :-moz-any(e, f, g)
@@ -2901,7 +2901,7 @@ SASS
 
     original_filename = filename_for_test
     engine = Sass::Engine.new('@import "imported"; div{color:blue}',
-      :filename => original_filename, :load_paths => [importer], :syntax => :scss, :importer => importer)
+      filename: original_filename, load_paths: [importer], syntax: :scss, importer: importer)
     engine.render
 
     assert_equal original_filename, engine.options[:original_filename]
@@ -3092,9 +3092,9 @@ SASS
     assert(false, "Expected exception")
   rescue Sass::SyntaxError => e
     assert_equal([
-        {:mixin => '@content', :line => 6, :filename => 'test_content_backtrace_for_perform_inline.sass'},
-        {:mixin => 'foo', :line => 2, :filename => 'test_content_backtrace_for_perform_inline.sass'},
-        {:line => 5, :filename => 'test_content_backtrace_for_perform_inline.sass'},
+        {mixin: '@content', line: 6, filename: 'test_content_backtrace_for_perform_inline.sass'},
+        {mixin: 'foo', line: 2, filename: 'test_content_backtrace_for_perform_inline.sass'},
+        {line: 5, filename: 'test_content_backtrace_for_perform_inline.sass'},
       ], e.sass_backtrace)
   end
 
@@ -3110,14 +3110,14 @@ SASS
     assert(false, "Expected exception")
   rescue Sass::SyntaxError => e
     assert_equal([
-        {:mixin => '@content', :line => 6, :filename => 'test_content_backtrace_for_cssize_inline.sass'},
-        {:mixin => 'foo', :line => 2, :filename => 'test_content_backtrace_for_cssize_inline.sass'},
-        {:line => 5, :filename => 'test_content_backtrace_for_cssize_inline.sass'},
+        {mixin: '@content', line: 6, filename: 'test_content_backtrace_for_cssize_inline.sass'},
+        {mixin: 'foo', line: 2, filename: 'test_content_backtrace_for_cssize_inline.sass'},
+        {line: 5, filename: 'test_content_backtrace_for_cssize_inline.sass'},
       ], e.sass_backtrace)
   end
 
   def test_mixin_with_args_and_varargs_passed_no_var_args
-    assert_equal <<CSS, render(<<SASS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SASS, syntax: :scss)
 .foo {
   a: 1;
   b: 2;
@@ -3140,7 +3140,7 @@ SASS
     assert_warning(<<END) {render("@debug (a: 1, b: 2)")}
 test_debug_inspects_sass_objects_inline.sass:1 DEBUG: (a: 1, b: 2)
 END
-    assert_warning(<<END) {render("$map: (a: 1, b: 2); @debug $map", :syntax => :scss)}
+    assert_warning(<<END) {render("$map: (a: 1, b: 2); @debug $map", syntax: :scss)}
 test_debug_inspects_sass_objects_inline.scss:1 DEBUG: (a: 1, b: 2)
 END
   end
@@ -3148,12 +3148,12 @@ END
   def test_error_throws_sass_objects
     assert_raise_message(Sass::SyntaxError, "(a: 1, b: 2)") {render("@error (a: 1, b: 2)")}
     assert_raise_message(Sass::SyntaxError, "(a: 1, b: 2)") do
-      render("$map: (a: 1, b: 2); @error $map", :syntax => :scss)
+      render("$map: (a: 1, b: 2); @error $map", syntax: :scss)
     end
   end
 
   def test_default_arg_before_splat
-    assert_equal <<CSS, render(<<SASS, :syntax => :scss)
+    assert_equal <<CSS, render(<<SASS, syntax: :scss)
 .foo-positional {
   a: 1;
   b: 2;
@@ -3265,7 +3265,7 @@ SASS
   end
 
   def test_compressed_unknown_directive
-    assert_equal(<<CSS, render(<<SASS, :style => :compressed))
+    assert_equal(<<CSS, render(<<SASS, style: :compressed))
 x{@foo;a:b;@bar}
 CSS
 x
@@ -3276,7 +3276,7 @@ SASS
   end
 
   def test_compressed_unknown_directive_in_directive
-    assert_equal(<<CSS, render(<<SASS, :style => :compressed))
+    assert_equal(<<CSS, render(<<SASS, style: :compressed))
 @x{@foo;a:b;@bar}
 CSS
 @x
@@ -3287,7 +3287,7 @@ SASS
   end
 
   def test_compressed_unknown_directive_with_children_in_directive
-    assert_equal(<<CSS, render(<<SASS, :style => :compressed))
+    assert_equal(<<CSS, render(<<SASS, style: :compressed))
 @x{@foo{a:b}c:d;@bar{e:f}}
 CSS
 @x
@@ -3300,7 +3300,7 @@ SASS
   end
 
   def test_compressed_rule_in_directive
-    assert_equal(<<CSS, render(<<SASS, :style => :compressed))
+    assert_equal(<<CSS, render(<<SASS, style: :compressed))
 @x{foo{a:b}c:d;bar{e:f}}
 CSS
 @x
@@ -3313,7 +3313,7 @@ SASS
   end
 
   def test_import_two_css_files_issue_1806
-    assert_equal(<<CSS, render(<<SASS, :syntax => :scss, :style => :compressed))
+    assert_equal(<<CSS, render(<<SASS, syntax: :scss, style: :compressed))
 @import url(\"foo.css\");@import url(\"bar.css\");@import url(\"baz.css\")
 CSS
 @import url("foo.css");
@@ -3363,8 +3363,8 @@ SASS
 
   def sassc_path(template)
     sassc_path = File.join(File.dirname(__FILE__) + "/templates/#{template}.sass")
-    engine = Sass::Engine.new("", :filename => sassc_path,
-      :importer => Sass::Importers::Filesystem.new("."))
+    engine = Sass::Engine.new("", filename: sassc_path,
+      importer: Sass::Importers::Filesystem.new("."))
     key = engine.send(:sassc_key)
     File.join(engine.options[:cache_location], key)
   end

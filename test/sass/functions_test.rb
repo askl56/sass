@@ -13,18 +13,18 @@ module Sass::Script::Functions
   def only_var_args(*args)
     Sass::Script::Value::String.new("only-var-args("+args.map{|a| a.plus(Sass::Script::Value::Number.new(1)).to_s }.join(", ")+")")
   end
-  declare :only_var_args, [], :var_args => true
+  declare :only_var_args, [], var_args: true
 
   def only_kw_args(kwargs)
     Sass::Script::Value::String.new("only-kw-args(" + kwargs.keys.map {|a| a.to_s}.sort.join(", ") + ")")
   end
-  declare :only_kw_args, [], :var_kwargs => true
+  declare :only_kw_args, [], var_kwargs: true
 
   def deprecated_arg_fn(arg1, arg2, arg3 = nil)
     Sass::Script::Value::List.new([arg1, arg2, arg3 || Sass::Script::Value::Null.new], :space)
   end
-  declare :deprecated_arg_fn, [:arg1, :arg2, :arg3], :deprecated => [:arg_1, :arg_2, :arg3]
-  declare :deprecated_arg_fn, [:arg1, :arg2], :deprecated => [:arg_1, :arg_2]
+  declare :deprecated_arg_fn, [:arg1, :arg2, :arg3], deprecated: [:arg_1, :arg_2, :arg3]
+  declare :deprecated_arg_fn, [:arg1, :arg2], deprecated: [:arg_1, :arg_2]
 end
 
 module Sass::Script::Functions::UserFunctions

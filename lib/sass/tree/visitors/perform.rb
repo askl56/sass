@@ -157,7 +157,7 @@ class Sass::Tree::Visitors::Perform < Sass::Tree::Visitors::Base
     return super(node.dup) unless @environment
     @environment.stack.with_base(node.filename, node.line) {super(node.dup)}
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:filename => node.filename, :line => node.line)
+    e.modify_backtrace(filename: node.filename, line: node.line)
     raise e
   end
 
@@ -327,8 +327,8 @@ WARNING
         node
       end
     rescue Sass::SyntaxError => e
-      e.modify_backtrace(:filename => node.imported_file.options[:filename])
-      e.add_backtrace(:filename => node.filename, :line => node.line)
+      e.modify_backtrace(filename: node.imported_file.options[:filename])
+      e.add_backtrace(filename: node.filename, line: node.line)
       raise e
     end
   end
@@ -366,8 +366,8 @@ WARNING
       end
     end
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:mixin => node.name, :line => node.line)
-    e.add_backtrace(:line => node.line)
+    e.modify_backtrace(mixin: node.name, line: node.line)
+    e.add_backtrace(line: node.line)
     raise e
   end
 
@@ -384,8 +384,8 @@ WARNING
       trace_node
     end
   rescue Sass::SyntaxError => e
-    e.modify_backtrace(:mixin => '@content', :line => node.line)
-    e.add_backtrace(:line => node.line)
+    e.modify_backtrace(mixin: '@content', line: node.line)
+    e.add_backtrace(line: node.line)
     raise e
   end
 
@@ -534,7 +534,7 @@ WARNING
   def run_interp_no_strip(text)
     text.map do |r|
       next r if r.is_a?(String)
-      r.perform(@environment).to_s(:quote => :none)
+      r.perform(@environment).to_s(quote: :none)
     end.join
   end
 

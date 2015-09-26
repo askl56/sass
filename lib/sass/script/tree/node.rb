@@ -49,7 +49,7 @@ module Sass::Script::Tree
     def perform(environment)
       _perform(environment)
     rescue Sass::SyntaxError => e
-      e.modify_backtrace(:line => line)
+      e.modify_backtrace(line: line)
       raise e
     end
 

@@ -37,7 +37,7 @@ module Sass
     #
     # @example
     #   to_hash([[:foo, "bar"], [:baz, "bang"]])
-    #     #=> {:foo => "bar", :baz => "bang"}
+    #     #=> {foo: "bar", baz: "bang"}
     # @param arr [Array<(Object, Object)>] An array of pairs
     # @return [Hash] A hash
     def to_hash(arr)
@@ -47,7 +47,7 @@ module Sass
     # Maps the keys in a hash according to a block.
     #
     # @example
-    #   map_keys({:foo => "bar", :baz => "bang"}) {|k| k.to_s}
+    #   map_keys({foo: "bar", baz: "bang"}) {|k| k.to_s}
     #     #=> {"foo" => "bar", "baz" => "bang"}
     # @param hash [Hash] The hash to map
     # @yield [key] A block in which the keys are transformed
@@ -63,8 +63,8 @@ module Sass
     # Maps the values in a hash according to a block.
     #
     # @example
-    #   map_values({:foo => "bar", :baz => "bang"}) {|v| v.to_sym}
-    #     #=> {:foo => :bar, :baz => :bang}
+    #   map_values({foo: "bar", baz: "bang"}) {|v| v.to_sym}
+    #     #=> {foo: :bar, baz: :bang}
     # @param hash [Hash] The hash to map
     # @yield [value] A block in which the values are transformed
     # @yieldparam value [Object] The value that should be mapped
@@ -86,7 +86,7 @@ module Sass
     # Maps the key-value pairs of a hash according to a block.
     #
     # @example
-    #   map_hash({:foo => "bar", :baz => "bang"}) {|k, v| [k.to_s, v.to_sym]}
+    #   map_hash({foo: "bar", baz: "bang"}) {|k, v| [k.to_s, v.to_sym]}
     #     #=> {"foo" => :bar, "baz" => :bang}
     # @param hash [Hash] The hash to map
     # @yield [key, value] A block in which the key-value pairs are transformed
@@ -819,7 +819,7 @@ module Sass
     # @overload ordered_hash(*pairs)
     #   @example
     #     ordered_hash([:foo, "bar"], [:baz, "bang"])
-    #       #=> {:foo => "bar", :baz => "bang"}
+    #       #=> {foo: "bar", baz: "bang"}
     #     ordered_hash #=> {}
     #   @param pairs [Array<(Object, Object)>] the list of key/value pairs for
     #     the hash.
@@ -1295,7 +1295,7 @@ module Sass
         rescue Encoding::UndefinedConversionError => e
           raise Sass::SyntaxError.new(
             "Invalid #{encoding.name} character #{undefined_conversion_error_char(e)}",
-            :line => i + 1)
+            line: i + 1)
         end
       end
 
